@@ -2,6 +2,7 @@
 desktop.ini
 temp.*
 tests/res/
+assets/res/
 
 # Miscellaneous
 *.class

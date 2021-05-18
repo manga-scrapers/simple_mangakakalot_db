@@ -14,6 +14,8 @@ class Book {
 
   List<Chapter> totalChaptersList = [];
 
+  //todo: finding latestChapter
+
   ///todo: determine datatype
   var currentChapter;
 

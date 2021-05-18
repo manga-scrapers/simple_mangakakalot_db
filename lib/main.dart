@@ -1,31 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:sample_mangakakalot_db/frontend/screens/favorites_page.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(),
-        body: MainPage(),
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.red.shade50,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+        ),
       ),
+      home: FavoritesPage(),
     );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
