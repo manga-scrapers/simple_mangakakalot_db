@@ -13,14 +13,14 @@ Book _$BookFromJson(Map<String, dynamic> json) {
     authors: json['authors'] as String,
     thumbnail: json['thumbnail'] as String,
     bookName: json['bookName'] as String,
-    totalChaptersList: (json['totalChaptersList'] as List)
-        ?.map((e) =>
-            e == null ? null : Chapter.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
     currentChapter: json['currentChapter'],
     summary: json['summary'] as String,
     rating: (json['rating'] as num)?.toDouble(),
     genres: (json['genres'] as List)?.map((e) => e as String)?.toList(),
+    totalChaptersList: (json['totalChaptersList'] as List)
+        ?.map((e) =>
+            e == null ? null : Chapter.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -29,11 +29,11 @@ Map<String, dynamic> _$BookToJson(Book instance) => <String, dynamic>{
       'authors': instance.authors,
       'thumbnail': instance.thumbnail,
       'bookName': instance.bookName,
-      'totalChaptersList': instance.totalChaptersList,
       'currentChapter': instance.currentChapter,
       'summary': instance.summary,
       'rating': instance.rating,
       'genres': instance.genres,
+      'totalChaptersList': instance.totalChaptersList,
     };
 
 Chapter _$ChapterFromJson(Map<String, dynamic> json) {

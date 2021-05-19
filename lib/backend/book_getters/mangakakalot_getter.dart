@@ -1,12 +1,13 @@
 import 'package:html/dom.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart';
+import 'package:http/http.dart' as http;
 import 'package:sample_mangakakalot_db/backend/BookModel.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/getter_selector.dart';
 
 class MangakakalotGetter implements GenerateBookFromSearchBook {
   SearchBook searchBook;
+
   MangakakalotGetter(this.searchBook);
 
   /// todo: change function name
@@ -21,6 +22,17 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
     }
 
     Document document = parse(response.body);
+
+    book.summary = document.querySelector("div#noidungm").text.trim();
+
+    book.genres = getGenres(document);
+
+    try {
+      book.rating = getRating(document);
+    } on Exception catch (e) {
+      // TODO
+      book.rating = 0.0;
+    }
 
     book.totalChaptersList = await getChapters(document);
     // print(book); //todo: debug only
@@ -75,5 +87,21 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
       // print(page);//todo: debug only
     }
     return pagesList;
+  }
+
+  List<String> getGenres(Document document) {
+    var doc = parse(
+        document.querySelectorAll("ul.manga-info-text > li")[6].innerHtml);
+    return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
+  }
+
+  double getRating(Document document) {
+    var ratingText = document.querySelector("em#rate_row_cmd").text.trim();
+    var regexp = RegExp(r"(\d+\.?\d+)(\s+\/\s+)(\d+)", caseSensitive: true);
+    var match = regexp.firstMatch(ratingText);
+    double rating = double.parse(match.group(1).trim()) /
+        double.parse(match.group(3).trim()) *
+        10;
+    return rating;
   }
 }
