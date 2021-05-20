@@ -1,9 +1,9 @@
 class SearchBook {
-  String thumbnail = null;
-  String bookName = null;
-  String latestChapter = null;
-  String authors = null;
-  String bookLink = null;
+  String thumbnail;
+  String bookName;
+  String latestChapter;
+  String authors;
+  String bookLink;
 
   ///debug only
   void printDetails() {
