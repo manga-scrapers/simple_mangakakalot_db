@@ -61,7 +61,7 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
     return chaptersList;
   }
 
-  Future<List<Page>> getPages(String chapterLink) async {
+  Future<List<PageOfChapter>> getPages(String chapterLink) async {
     http.Response response = await http.get(Uri.parse(chapterLink));
 
     if (response.statusCode != 200) {
@@ -74,9 +74,9 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
     var allPages =
         document.querySelectorAll("div.container-chapter-reader > img[src]");
 
-    List<Page> pagesList = [];
+    List<PageOfChapter> pagesList = [];
     for (var each_page in allPages) {
-      Page page = Page();
+      PageOfChapter page = PageOfChapter();
       page.pageLink = each_page.attributes['src'];
 
       var regexp =

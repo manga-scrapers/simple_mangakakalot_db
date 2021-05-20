@@ -44,8 +44,9 @@ Chapter _$ChapterFromJson(Map<String, dynamic> json) {
     chapterLink: json['chapterLink'] as String,
     hasRead: json['hasRead'] as bool ?? false,
     pages: (json['pages'] as List)
-        ?.map(
-            (e) => e == null ? null : Page.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => e == null
+            ? null
+            : PageOfChapter.fromJson(e as Map<String, dynamic>))
         ?.toList(),
   );
 }
@@ -58,14 +59,15 @@ Map<String, dynamic> _$ChapterToJson(Chapter instance) => <String, dynamic>{
       'pages': instance.pages,
     };
 
-Page _$PageFromJson(Map<String, dynamic> json) {
-  return Page(
+PageOfChapter _$PageOfChapterFromJson(Map<String, dynamic> json) {
+  return PageOfChapter(
     pageLink: json['pageLink'] as String,
     pageNumber: json['pageNumber'] as int,
   );
 }
 
-Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
+Map<String, dynamic> _$PageOfChapterToJson(PageOfChapter instance) =>
+    <String, dynamic>{
       'pageLink': instance.pageLink,
       'pageNumber': instance.pageNumber,
     };

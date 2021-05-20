@@ -61,7 +61,7 @@ class Chapter {
   @JsonKey(defaultValue: false)
   bool hasRead = false;
 
-  List<Page> pages = [];
+  List<PageOfChapter> pages = [];
 
   Chapter({
     this.name,
@@ -83,11 +83,11 @@ class Chapter {
 }
 
 @JsonSerializable()
-class Page {
+class PageOfChapter {
   String pageLink;
   int pageNumber = 0;
 
-  Page({
+  PageOfChapter({
     this.pageLink,
     this.pageNumber,
   });
@@ -96,7 +96,8 @@ class Page {
   // String toString() {
   //   return "<$pageLink , $pageNumber>";
   // }
-  factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
+  factory PageOfChapter.fromJson(Map<String, dynamic> json) =>
+      _$PageOfChapterFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PageToJson(this);
+  Map<String, dynamic> toJson() => _$PageOfChapterToJson(this);
 }
