@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class BookCard extends StatelessWidget {
@@ -23,8 +24,8 @@ class BookCard extends StatelessWidget {
             httpHeaders: R.headers,
             placeholder: (context, url) => Icon(Icons.image_search),
           ),
-          Text(bookName),
-          Text(latestChapter),
+          HorizontalScrollableText(bookName),
+          HorizontalScrollableText(latestChapter),
         ],
       ),
     );

@@ -1,25 +1,33 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 
-part 'BookModel.g.dart';
+part 'book_model.g.dart';
 
-@JsonSerializable()
+@HiveType(typeId: 0)
 class Book {
   /// Do not change this. It's a primary key.
-  @JsonKey(required: true)
+  @HiveField(0)
   String bookLink;
+  @HiveField(1)
   String authors;
+  @HiveField(2)
   String thumbnail;
+  @HiveField(3)
   String bookName;
 
   //todo: finding latestChapter
   ///todo: determine datatype
-  var currentChapter;
+  @HiveField(4)
+  Chapter currentChapter;
 
+  @HiveField(5)
   String summary;
+  @HiveField(6)
   double rating = 0.0;
+  @HiveField(7)
   List<String> genres = [];
 
+  @HiveField(8)
   List<Chapter> totalChaptersList = [];
 
   Book({
@@ -41,26 +49,26 @@ class Book {
     this.thumbnail = searchBook.thumbnail;
   }
 
-  // @override
-  // String toString() {
-  //   return "<$bookLink , $authors , $thumbnail , $bookName , $summary , $genres , $rating , $totalChaptersList , $currentChapter>";
-  // }
-
-  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
-
-  Map<String, dynamic> toJson() => _$BookToJson(this);
+// @override
+// String toString() {
+//   return "<$bookLink , $authors , $thumbnail , $bookName , $summary , $genres , $rating , $totalChaptersList , $currentChapter>";
+// }
 }
 
-@JsonSerializable()
+@HiveType(typeId: 1)
 class Chapter {
-  String name;
-  String date;
-  @JsonKey(required: true)
+  @HiveField(0)
   String chapterLink;
 
-  @JsonKey(defaultValue: false)
+  @HiveField(1)
+  String name;
+  @HiveField(2)
+  String date;
+
+  @HiveField(3)
   bool hasRead = false;
 
+  @HiveField(4)
   List<PageOfChapter> pages = [];
 
   Chapter({
@@ -71,20 +79,18 @@ class Chapter {
     this.pages,
   });
 
-  // @override
-  // String toString() {
-  //   return "<$name , $date , $chapterLink , $has_read , $pages>";
-  // }
+// @override
+// String toString() {
+//   return "<$name , $date , $chapterLink , $has_read , $pages>";
+// }
 
-  factory Chapter.fromJson(Map<String, dynamic> json) =>
-      _$ChapterFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ChapterToJson(this);
 }
 
-@JsonSerializable()
+@HiveType(typeId: 2)
 class PageOfChapter {
+  @HiveField(0)
   String pageLink;
+  @HiveField(1)
   int pageNumber = 0;
 
   PageOfChapter({
@@ -92,12 +98,8 @@ class PageOfChapter {
     this.pageNumber,
   });
 
-  // @override
-  // String toString() {
-  //   return "<$pageLink , $pageNumber>";
-  // }
-  factory PageOfChapter.fromJson(Map<String, dynamic> json) =>
-      _$PageOfChapterFromJson(json);
-
-  Map<String, dynamic> toJson() => _$PageOfChapterToJson(this);
+// @override
+// String toString() {
+//   return "<$pageLink , $pageNumber>";
+// }
 }

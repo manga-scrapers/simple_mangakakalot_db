@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
-import 'package:sample_mangakakalot_db/file_handler.dart';
+import 'package:hive/hive.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_card.dart';
-import 'package:sample_mangakakalot_db/frontend/screens/book_content_page.dart';
+import 'package:sample_mangakakalot_db/frontend/screens/search_screen.dart';
+import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key key}) : super(key: key);
@@ -14,48 +13,40 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  Future<Book> getBook() async {
-    // print(Directory.current);
-    var file = await FileHandler.loadStringAsset("assets/res/file.json");
-
-    return Book.fromJson(jsonDecode(file));
-  }
-
   @override
   Widget build(BuildContext context) {
-    getBook();
+    // getBook();
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Favorites"),
-        ),
-        body: FutureBuilder(
-          future: getBook(),
-          builder: (BuildContext context, AsyncSnapshot<Book> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              var book = snapshot.data;
-              return Container(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BookContentPage(book),
-                      ),
-                    );
-                  },
-                  child: BookCard(book.thumbnail, book.bookName,
-                      book.totalChaptersList[0].name),
-                ),
+      appBar: AppBar(
+        title: Text("Favorites"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(),
               );
-            } else {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          },
-        ));
+            },
+            icon: Icon(Icons.search),
+          ),
+        ],
+      ),
+      body: GridView.builder(
+        itemCount: Hive.box<Book>(R.favorite_books).length,
+        gridDelegate:
+            SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 4),
+        itemBuilder: (context, index) {
+          var box = Hive.box<Book>(R.favorite_books);
+          var book = box.getAt(index);
+          return ValueListenableBuilder<String>(
+            valueListenable: ValueNotifier(book.totalChaptersList[0].name),
+            builder: (BuildContext context, value, Widget child) {
+              return BookCard(book.thumbnail, book.bookName,
+                  book.totalChaptersList[0].name);
+            },
+          );
+        },
+      ),
+    );
   }
 }

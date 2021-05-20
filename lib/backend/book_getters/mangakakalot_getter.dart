@@ -1,9 +1,9 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
-import 'package:sample_mangakakalot_db/backend/getter_selector.dart';
+import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
 
 class MangakakalotGetter implements GenerateBookFromSearchBook {
   SearchBook searchBook;

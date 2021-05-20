@@ -1,4 +1,4 @@
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_getters/mangakakalot_getter.dart';
 import 'package:sample_mangakakalot_db/backend/book_getters/manganelo_getter.dart';

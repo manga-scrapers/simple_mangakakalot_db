@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_content_heading.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/reading_page.dart';
@@ -68,6 +68,10 @@ class _BookContentPageState extends State<BookContentPage> {
                       itemBuilder: (context, index) {
                         return OutlinedButton(
                           onPressed: () {
+                            widget._book.totalChaptersList[index].hasRead =
+                                true;
+                            widget._book.currentChapter =
+                                widget._book.totalChaptersList[index];
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/page_image_provider.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
