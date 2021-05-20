@@ -6,7 +6,7 @@ import 'package:sample_mangakakalot_db/backend/getter_selector.dart';
 
 void main() {
   print("\n[Starting]\n");
-  logic(searchIndex: 3);
+  logic(searchIndex: 1);
 }
 
 void logic({int searchIndex = 0}) async {
@@ -25,7 +25,7 @@ void logic({int searchIndex = 0}) async {
   // print("In_Main: ($searchIndex) \n $book \n");
   // print("[Ending] \n");
 
-  final filename = 'tests/res/file.json';
+  final filename = 'assets/res/file.json';
   var file =
       await File(filename).writeAsString(prettyJson(book.toJson(), indent: 4));
 

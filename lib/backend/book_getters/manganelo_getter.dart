@@ -23,6 +23,13 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
 
     Document document = parse(response.body);
 
+    book.summary =
+        document.querySelector("div#panel-story-info-description").text.trim();
+
+    book.genres = getGenres(document);
+
+    book.rating = getRating(document);
+
     book.totalChaptersList = await getChapters(document);
     // print(book); //todo: debug only
     return book; //todo verify again from here
@@ -51,7 +58,7 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
     return chaptersList;
   }
 
-  Future<List<Page>> getPages(String chapterLink) async {
+  Future<List<PageOfChapter>> getPages(String chapterLink) async {
     http.Response response = await http.get(Uri.parse(chapterLink));
 
     if (response.statusCode != 200) {
@@ -64,9 +71,9 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
     var allPages =
         document.querySelectorAll("div.container-chapter-reader > img[src]");
 
-    List<Page> pagesList = [];
+    List<PageOfChapter> pagesList = [];
     for (var each_page in allPages) {
-      Page page = Page();
+      PageOfChapter page = PageOfChapter();
       page.pageLink = each_page.attributes['src'];
 
       var regexp =
@@ -77,5 +84,21 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
       // print(page);//todo: debug only
     }
     return pagesList;
+  }
+
+  List<String> getGenres(Document document) {
+    var doc = parse(document.querySelectorAll("td.table-value")[3].innerHtml);
+    return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
+  }
+
+  double getRating(Document document) {
+    var ratingAvg = double.parse(
+        document.querySelector("em[property=\"v:average\"]").text.trim());
+    var ratingBest = double.parse(
+        document.querySelector("em[property=\"v:best\"]").text.trim());
+    var rating = ratingAvg / ratingBest * 10;
+    // print(rating);
+    // print(rating.toStringAsFixed(2));
+    return rating;
   }
 }

@@ -1,12 +1,13 @@
 import 'package:html/dom.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart';
+import 'package:http/http.dart' as http;
 import 'package:sample_mangakakalot_db/backend/BookModel.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/getter_selector.dart';
 
 class MangakakalotGetter implements GenerateBookFromSearchBook {
   SearchBook searchBook;
+
   MangakakalotGetter(this.searchBook);
 
   /// todo: change function name
@@ -21,6 +22,17 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
     }
 
     Document document = parse(response.body);
+
+    book.summary = document.querySelector("div#noidungm").text.trim();
+
+    book.genres = getGenres(document);
+
+    try {
+      book.rating = getRating(document);
+    } on Exception catch (e) {
+      // TODO
+      book.rating = 0.0;
+    }
 
     book.totalChaptersList = await getChapters(document);
     // print(book); //todo: debug only
@@ -49,7 +61,7 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
     return chaptersList;
   }
 
-  Future<List<Page>> getPages(String chapterLink) async {
+  Future<List<PageOfChapter>> getPages(String chapterLink) async {
     http.Response response = await http.get(Uri.parse(chapterLink));
 
     if (response.statusCode != 200) {
@@ -62,9 +74,9 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
     var allPages =
         document.querySelectorAll("div.container-chapter-reader > img[src]");
 
-    List<Page> pagesList = [];
+    List<PageOfChapter> pagesList = [];
     for (var each_page in allPages) {
-      Page page = Page();
+      PageOfChapter page = PageOfChapter();
       page.pageLink = each_page.attributes['src'];
 
       var regexp =
@@ -75,5 +87,21 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
       // print(page);//todo: debug only
     }
     return pagesList;
+  }
+
+  List<String> getGenres(Document document) {
+    var doc = parse(
+        document.querySelectorAll("ul.manga-info-text > li")[6].innerHtml);
+    return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
+  }
+
+  double getRating(Document document) {
+    var ratingText = document.querySelector("em#rate_row_cmd").text.trim();
+    var regexp = RegExp(r"(\d+\.?\d+)(\s+\/\s+)(\d+)", caseSensitive: true);
+    var match = regexp.firstMatch(ratingText);
+    double rating = double.parse(match.group(1).trim()) /
+        double.parse(match.group(3).trim()) *
+        10;
+    return rating;
   }
 }

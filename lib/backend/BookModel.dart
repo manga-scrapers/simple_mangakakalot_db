@@ -12,28 +12,26 @@ class Book {
   String thumbnail;
   String bookName;
 
-  List<Chapter> totalChaptersList = [];
-
   //todo: finding latestChapter
-
   ///todo: determine datatype
   var currentChapter;
 
   String summary;
-
   double rating = 0.0;
-
   List<String> genres = [];
+
+  List<Chapter> totalChaptersList = [];
+
   Book({
     this.bookLink,
     this.authors,
     this.thumbnail,
     this.bookName,
-    this.totalChaptersList,
     this.currentChapter,
     this.summary,
     this.rating,
     this.genres,
+    this.totalChaptersList,
   });
 
   Book.generateFromSearchBook(SearchBook searchBook) {
@@ -49,6 +47,7 @@ class Book {
   // }
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+
   Map<String, dynamic> toJson() => _$BookToJson(this);
 }
 
@@ -62,7 +61,7 @@ class Chapter {
   @JsonKey(defaultValue: false)
   bool hasRead = false;
 
-  List<Page> pages = [];
+  List<PageOfChapter> pages = [];
 
   Chapter({
     this.name,
@@ -79,14 +78,16 @@ class Chapter {
 
   factory Chapter.fromJson(Map<String, dynamic> json) =>
       _$ChapterFromJson(json);
+
   Map<String, dynamic> toJson() => _$ChapterToJson(this);
 }
 
 @JsonSerializable()
-class Page {
+class PageOfChapter {
   String pageLink;
   int pageNumber = 0;
-  Page({
+
+  PageOfChapter({
     this.pageLink,
     this.pageNumber,
   });
@@ -95,6 +96,8 @@ class Page {
   // String toString() {
   //   return "<$pageLink , $pageNumber>";
   // }
-  factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
-  Map<String, dynamic> toJson() => _$PageToJson(this);
+  factory PageOfChapter.fromJson(Map<String, dynamic> json) =>
+      _$PageOfChapterFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PageOfChapterToJson(this);
 }
