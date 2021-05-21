@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/favorites_page.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
@@ -20,6 +21,9 @@ Future<void> loadHiveAdaptersAndBoxes() async {
 
   await Hive.openBox<Book>(R.favorite_books);
   await Hive.openBox<Book>(R.books_cache);
+  await Hive.openBox<SearchBook>(R.searchBooks_cache);
+  await Hive.openBox<Chapter>(R.chapters_cache);
+  await Hive.openBox<PageOfChapter>(R.pages_cache);
 }
 
 class MyApp extends StatelessWidget {

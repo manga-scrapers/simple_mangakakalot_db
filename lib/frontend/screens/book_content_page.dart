@@ -3,16 +3,20 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
+import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_content_heading.dart';
-import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
-import 'package:sample_mangakakalot_db/frontend/screens/reading_page.dart';
+import 'package:sample_mangakakalot_db/frontend/components/chapters_list_view.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class BookContentPage extends StatefulWidget {
-  final Book _book;
+  // final Book book;
+  final SearchBook searchBook;
 
-  BookContentPage(this._book);
+  // BookContentPage(this.book);
+
+  BookContentPage.fromSearchBook(this.searchBook);
 
   @override
   _BookContentPageState createState() => _BookContentPageState();
@@ -23,8 +27,8 @@ class _BookContentPageState extends State<BookContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    // var box = Hive.box(R.books_cache);
-    // var liveBook = box.
+    var box = Hive.box<Book>(R.books_cache);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Book Detail"),
@@ -46,66 +50,49 @@ class _BookContentPageState extends State<BookContentPage> {
         ],
       ),
       body: SafeArea(
-        child: ValueListenableBuilder<Book>(
-          valueListenable: ValueNotifier(widget._book),
-          builder: (context, book, child) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: BookContentHeading(book),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      ExpansionTile(
-                        title: Text("Summary"),
-                        childrenPadding: EdgeInsets.all(8.0),
+        child: FutureBuilder<Book>(
+            initialData: box.get(widget.searchBook.bookLink),
+            future: GenerateBookFromSearchBook(widget.searchBook).getBook(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                var book = snapshot.data;
+                box.put(book.bookLink, book);
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: BookContentHeading(book),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Column(
                         children: [
-                          Text(book.summary ?? "Summary"),
+                          ExpansionTile(
+                            title: Text("Summary"),
+                            childrenPadding: EdgeInsets.all(8.0),
+                            children: [
+                              Text(book.summary ?? "Summary"),
+                            ],
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: ChaptersListView(
+                              listViewReverse: listViewReverse,
+                              book: book,
+                              widget: widget,
+                            ),
+                          ),
                         ],
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: ListView.builder(
-                          reverse: listViewReverse,
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          itemCount: book.totalChaptersList.length,
-                          itemBuilder: (context, index) {
-                            return OutlinedButton(
-                              onPressed: () {
-                                book.totalChaptersList[index].hasRead = true;
-                                book.currentChapter =
-                                    book.totalChaptersList[index];
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ReadingPage(
-                                        book.totalChaptersList[index]),
-                                  ),
-                                );
-                              },
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: HorizontalScrollableText(
-                                  book.totalChaptersList[index].name,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          },
-        ),
+                    )
+                  ],
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(color: Colors.red),
+                );
+              }
+            }),
       ),
     );
   }

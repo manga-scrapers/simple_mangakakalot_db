@@ -34,14 +34,13 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
       book.rating = 0.0;
     }
 
-    book.totalChaptersList = await getChapters(document);
+    book.totalChaptersList = getChapters(document);
     // print(book); //todo: debug only
     return book; //todo verify again from here
   }
 
-  Future<List<Chapter>> getChapters(Document document) async {
+  List<Chapter> getChapters(Document document) {
     List<Chapter> chaptersList = [];
-
     var allChapters = document.querySelectorAll("div.chapter-list > div.row");
 
     for (var each_chapter in allChapters) {
@@ -52,10 +51,11 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
           doc.querySelector("a[href]").attributes['href'].trim();
       chapter.name = doc.querySelector("a[href]").text.trim();
       chapter.date = doc.querySelectorAll("span")[2].text.trim();
-      chapter.pages = await getPages(chapter.chapterLink);
+
+      //todo:
+      chapter.pages = []; //await getPages(chapter.chapterLink);
 
       chaptersList.add(chapter);
-
       // print(chapter); //todo: debug only
     }
     return chaptersList;

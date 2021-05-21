@@ -30,12 +30,12 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
 
     book.rating = getRating(document);
 
-    book.totalChaptersList = await getChapters(document);
+    book.totalChaptersList = getChapters(document);
     // print(book); //todo: debug only
     return book; //todo verify again from here
   }
 
-  Future<List<Chapter>> getChapters(Document document) async {
+  List<Chapter> getChapters(Document document) {
     List<Chapter> chaptersList = [];
 
     var allChapters =
@@ -49,7 +49,9 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
           doc.querySelector("a[href]").attributes['href'].trim();
       chapter.name = doc.querySelector("a[href]").text.trim();
       chapter.date = doc.querySelectorAll("span")[1].text.trim();
-      chapter.pages = await getPages(chapter.chapterLink);
+
+      //todo:
+      chapter.pages = []; // await getPages(chapter.chapterLink);
 
       chaptersList.add(chapter);
 

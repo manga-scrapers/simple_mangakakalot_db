@@ -7,12 +7,9 @@ import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart'
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class BookContentHeading extends StatefulWidget {
-  const BookContentHeading(
-    this._book, {
-    Key key,
-  }) : super(key: key);
-
   final Book _book;
+
+  BookContentHeading(this._book);
 
   @override
   _BookContentHeadingState createState() => _BookContentHeadingState();
