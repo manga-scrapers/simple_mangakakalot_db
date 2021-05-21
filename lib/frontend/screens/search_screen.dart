@@ -3,7 +3,7 @@ import 'package:sample_mangakakalot_db/backend/GetBooksFromSearch.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/frontend/components/search_card.dart';
 
-class CustomSearchDelegate extends SearchDelegate {
+class CustomSearchDelegate extends SearchDelegate<SearchBook> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -40,19 +40,23 @@ class CustomSearchDelegate extends SearchDelegate {
         ],
       );
     }
-    return FutureBuilder(
+    return FutureBuilder<List<SearchBook>>(
       future: GetBooksFromSearch(query).getSearchResults(),
-      builder: (context, AsyncSnapshot<List<SearchBook>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
               return SearchCard(snapshot.data[index]);
             },
+            shrinkWrap: true,
           );
-        } else {
-          return Center(child: CircularProgressIndicator());
         }
+        if (snapshot.hasError) {
+          return Center(child: Icon(Icons.error));
+        }
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

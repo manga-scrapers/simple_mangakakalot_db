@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
+import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
@@ -42,12 +43,12 @@ class _BookContentHeadingState extends State<BookContentHeading> {
           children: [
             HorizontalScrollableText(
               widget._book.bookName,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+              style: kBookNameTextStyle,
             ),
             SizedBox(height: 2.0),
             HorizontalScrollableText(
               widget._book.authors,
-              style: TextStyle(color: Colors.grey.shade700, fontSize: 16.0),
+              style: kAuthorsTextStyle,
             ),
             SizedBox(height: 2.0),
             HorizontalScrollableText(

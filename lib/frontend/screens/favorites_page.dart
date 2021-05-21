@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_card.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/search_screen.dart';
@@ -22,10 +23,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
         actions: [
           IconButton(
             onPressed: () {
-              showSearch(
+              showSearch<SearchBook>(
                 context: context,
                 delegate: CustomSearchDelegate(),
-              );
+              ).then((searchedBook) {});
             },
             icon: Icon(Icons.search),
           ),
