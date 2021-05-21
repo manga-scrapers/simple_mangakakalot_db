@@ -20,12 +20,13 @@ class BookContentHeading extends StatefulWidget {
 
 class _BookContentHeadingState extends State<BookContentHeading> {
   bool isFavorite = false;
-  var box = Hive.box<Book>(R.favorite_books);
+  var favBox = Hive.box<Book>(R.favorite_books);
 
   @override
   Widget build(BuildContext context) {
     precacheImage(NetworkImage(widget._book.thumbnail), context);
 
+    var currentChapter = widget._book.currentChapter ?? Chapter(name: "0");
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
         child: CachedNetworkImage(
@@ -66,19 +67,21 @@ class _BookContentHeadingState extends State<BookContentHeading> {
                   OutlinedButton.icon(
                     onPressed: () {
                       //todo: change background color
-                      if (!isFavorite) {
-                        box.put(widget._book.bookLink, widget._book);
+                      if (isFavorite) {
+                        favBox.put(widget._book.bookLink, widget._book);
                       } else {
-                        box.delete(widget._book.bookLink);
+                        favBox.delete(widget._book.bookLink);
                       }
                       setState(() {
                         isFavorite = !isFavorite;
                       });
                     },
-                    icon: Icon(Icons.favorite_outline),
-                    label: Text("Favorite"),
+                    icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_outline),
+                    label: Text(isFavorite ? "Favorited" : "Favorite"),
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.orangeAccent,
+                      backgroundColor:
+                          isFavorite ? Colors.orange : Colors.orange.shade200,
                       textStyle: TextStyle(
                         color: Colors.black,
                       ),
@@ -90,8 +93,10 @@ class _BookContentHeadingState extends State<BookContentHeading> {
                       //todo: goto page
                     },
                     icon: Text("Read "),
-                    label: HorizontalScrollableText(
-                        widget._book.currentChapter ?? "1"),
+                    label: Text(
+                      "${currentChapter.name}",
+                      overflow: TextOverflow.fade,
+                    ),
                   ),
                 ],
               ),

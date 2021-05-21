@@ -19,6 +19,7 @@ Future<void> loadHiveAdaptersAndBoxes() async {
   Hive.registerAdapter(PageOfChapterAdapter());
 
   await Hive.openBox<Book>(R.favorite_books);
+  await Hive.openBox<Book>(R.books_cache);
 }
 
 class MyApp extends StatelessWidget {

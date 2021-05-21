@@ -26,24 +26,30 @@ class _FavoritesPageState extends State<FavoritesPage> {
               showSearch<SearchBook>(
                 context: context,
                 delegate: CustomSearchDelegate(),
-              ).then((searchedBook) {});
+              );
             },
             icon: Icon(Icons.search),
           ),
         ],
       ),
-      body: GridView.builder(
-        itemCount: Hive.box<Book>(R.favorite_books).length,
-        gridDelegate:
-            SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 4),
-        itemBuilder: (context, index) {
-          var box = Hive.box<Book>(R.favorite_books);
-          var book = box.getAt(index);
-          return ValueListenableBuilder<String>(
-            valueListenable: ValueNotifier(book.totalChaptersList[0].name),
-            builder: (BuildContext context, value, Widget child) {
-              return BookCard(book.thumbnail, book.bookName,
-                  book.totalChaptersList[0].name);
+      body: ValueListenableBuilder(
+        valueListenable: ValueNotifier(Hive.box<Book>(R.favorite_books).length),
+        builder: (BuildContext context, int value, Widget child) {
+          return GridView.builder(
+            itemCount: value,
+            gridDelegate:
+                SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 4),
+            itemBuilder: (context, index) {
+              var box = Hive.box<Book>(R.favorite_books);
+
+              var book = box.getAt(index);
+              return ValueListenableBuilder<String>(
+                valueListenable: ValueNotifier(book.totalChaptersList[0].name),
+                builder: (BuildContext context, value, Widget child) {
+                  return BookCard(book.thumbnail, book.bookName,
+                      book.totalChaptersList[0].name);
+                },
+              );
             },
           );
         },
