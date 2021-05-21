@@ -26,7 +26,7 @@ class ReadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     /// todo: better implementation
     cacheImage(context);
-    // var box = Hive.box<PageOf(R.pages_cache);
+    // var box = Hive.box<PageOfChapter(R.pages_cache);
     return Scaffold(
       backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
       appBar: AppBar(

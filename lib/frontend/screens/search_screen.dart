@@ -80,7 +80,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
 
   @override
   void close(BuildContext context, SearchBook result) {
-    print("Closing/Navigating");
+    // print("Closing/Navigating");
     Navigator.push(context, MaterialPageRoute(
       builder: (context) {
         return BookContentPage.fromSearchBook(result);

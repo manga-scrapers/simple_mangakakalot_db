@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_card.dart';
@@ -14,8 +16,22 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
+  Box<Book> favBox;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO: implement initState
+    favBox = Hive.box<Book>(R.favorite_books);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // for (int i = 0; i < favBox.length; i++) {
+    //   print("$i : ${favBox.keyAt(i)} : ${favBox.getAt(i).bookLink}");
+    // }
+
     // getBook();
     return Scaffold(
       appBar: AppBar(
@@ -32,24 +48,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ),
         ],
       ),
-      body: ValueListenableBuilder(
-        valueListenable: ValueNotifier(Hive.box<Book>(R.favorite_books).length),
-        builder: (BuildContext context, int value, Widget child) {
-          return GridView.builder(
-            itemCount: value,
-            gridDelegate:
-                SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 4),
+      body: ValueListenableBuilder<Box<Book>>(
+        valueListenable: favBox.listenable(),
+        builder: (context, box, child) {
+          return ListView.builder(
+            itemCount: box.length,
             itemBuilder: (context, index) {
-              var box = Hive.box<Book>(R.favorite_books);
-
-              var book = box.getAt(index);
-              return ValueListenableBuilder<String>(
-                valueListenable: ValueNotifier(book.totalChaptersList[0].name),
-                builder: (BuildContext context, value, Widget child) {
-                  return BookCard(book.thumbnail, book.bookName,
-                      book.totalChaptersList[0].name);
-                },
-              );
+              return BookCard(SearchBook.fromBook(box.getAt(index)));
             },
           );
         },
@@ -57,3 +62,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 }
+// WatchBoxBuilder(
+// box: favBox,
+// builder: (BuildContext context, Box<dynamic> box) {
+// return ListView.builder(
+// itemCount: box.length,
+// itemBuilder: (context, index) {
+// return BookCard(SearchBook.fromBook(box.getAt(index) as Book));
+// },
+// );
+// },
+// ),

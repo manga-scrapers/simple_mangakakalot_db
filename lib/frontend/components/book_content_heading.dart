@@ -16,8 +16,18 @@ class BookContentHeading extends StatefulWidget {
 }
 
 class _BookContentHeadingState extends State<BookContentHeading> {
-  bool isFavorite = false;
-  var favBox = Hive.box<Book>(R.favorite_books);
+  bool isFavorite;
+  Box<Book> favBox;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO: implement initState
+    favBox = Hive.box<Book>(R.favorite_books);
+
+    isFavorite = favBox.containsKey(widget._book.bookLink);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +61,12 @@ class _BookContentHeadingState extends State<BookContentHeading> {
             SizedBox(height: 2.0),
             HorizontalScrollableText(
               //todo: properly convert
-              "Genres: ${widget._book.genres.reduce((value, element) => value + " " + element)}",
+              "Genres: ${widget._book.genres.reduce((v, e) => v + " " + e)}",
             ),
             SizedBox(height: 2.0),
             HorizontalScrollableText(
-                "Rating: " + widget._book.rating.toStringAsFixed(2)),
+              "Rating: " + widget._book.rating.toStringAsFixed(2),
+            ),
             SizedBox(height: 2.0),
             Expanded(
               child: Row(
@@ -64,13 +75,16 @@ class _BookContentHeadingState extends State<BookContentHeading> {
                   OutlinedButton.icon(
                     onPressed: () {
                       //todo: change background color
-                      if (isFavorite) {
-                        favBox.put(widget._book.bookLink, widget._book);
+                      if (!isFavorite) {
+                        favBox.put(widget._book.bookLink, widget._book).then(
+                            (value) =>
+                                print("value put ${widget._book.bookLink}"));
                       } else {
-                        favBox.delete(widget._book.bookLink);
+                        favBox.delete(widget._book.bookLink).then((value) =>
+                            print("del value  ${widget._book.bookLink}"));
                       }
                       setState(() {
-                        isFavorite = !isFavorite;
+                        isFavorite = favBox.containsKey(widget._book.bookLink);
                       });
                     },
                     icon: Icon(
@@ -92,6 +106,7 @@ class _BookContentHeadingState extends State<BookContentHeading> {
                     icon: Text("Read "),
                     label: Text(
                       "${currentChapter.name}",
+                      textAlign: TextAlign.center,
                       overflow: TextOverflow.fade,
                     ),
                   ),

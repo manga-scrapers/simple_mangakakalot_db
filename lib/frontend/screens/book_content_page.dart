@@ -11,10 +11,7 @@ import 'package:sample_mangakakalot_db/frontend/components/chapters_list_view.da
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class BookContentPage extends StatefulWidget {
-  // final Book book;
   final SearchBook searchBook;
-
-  // BookContentPage(this.book);
 
   BookContentPage.fromSearchBook(this.searchBook);
 
@@ -24,11 +21,18 @@ class BookContentPage extends StatefulWidget {
 
 class _BookContentPageState extends State<BookContentPage> {
   bool listViewReverse = false;
+  Box<Book> box;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO: implement initState
+    box = Hive.box<Book>(R.books_cache);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box<Book>(R.books_cache);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Book Detail"),
