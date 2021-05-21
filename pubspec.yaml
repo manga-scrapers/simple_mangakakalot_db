@@ -16,17 +16,18 @@ dependencies:
 
   html: ^0.15.0
   http: ^0.13.3
-  json_annotation: ^3.1.1
   pretty_json: ^2.0.0
   path_provider: ^2.0.1
   cached_network_image: ^3.0.0
+  hive: ^2.0.4
+  hive_flutter: ^1.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   build_runner:
-  json_serializable: ^3.5.1
+  hive_generator: ^1.1.0
 
 # The following section is specific to Flutter.
 flutter:

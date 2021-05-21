@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class PageImageProvider extends StatelessWidget {

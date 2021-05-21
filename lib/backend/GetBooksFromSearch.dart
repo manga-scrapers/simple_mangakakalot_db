@@ -4,13 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 
 class GetBooksFromSearch {
-  String searchName = null;
+  String searchName;
+
   GetBooksFromSearch(this.searchName) {
     searchName =
         (searchName.trim().toLowerCase()).replaceAll(RegExp(r"(\s+)"), "_");
   }
 
-  Future<SearchBook> getSearchResults({int searchIndex = 0}) async {
+  Future<List<SearchBook>> getSearchResults() async {
     String handler = "https://mangakakalot.com/search/story/$searchName";
 
     var response = await http.get(Uri.parse(handler));
@@ -22,18 +23,18 @@ class GetBooksFromSearch {
 
     var document = parse(response.body);
 
-    List x = await doSomeMoreWork(document);
+    List x = await _doSomeMoreWork(document);
 
-    //todo: testing only
-    return x[searchIndex];
+    //todo: implement better ones
+    return x;
   }
 
-  Future<List<SearchBook>> doSomeMoreWork(Document document) async {
+  Future<List<SearchBook>> _doSomeMoreWork(Document document) async {
     List<SearchBook> searchResults = [];
 
-    var story_items = document.querySelectorAll("div.story_item");
+    var storyItems = document.querySelectorAll("div.story_item");
 
-    for (var each_story in story_items) {
+    for (var each_story in storyItems) {
       SearchBook book = new SearchBook();
 
       var doc = parse(each_story.innerHtml);
