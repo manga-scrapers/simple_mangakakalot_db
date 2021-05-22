@@ -6,8 +6,12 @@ class HorizontalScrollableText extends StatelessWidget {
   final TextAlign textAlign;
   final TextOverflow overflow;
 
-  HorizontalScrollableText(this.data,
-      {this.style, this.textAlign, this.overflow});
+  HorizontalScrollableText(
+    this.data, {
+    this.style,
+    this.textAlign = TextAlign.end,
+    this.overflow = TextOverflow.fade,
+  });
 
   @override
   Widget build(BuildContext context) {

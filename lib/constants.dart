@@ -7,10 +7,10 @@ final kAuthorsTextStyle =
 
 final ButtonStyle kChapterReadButtonStyle = OutlinedButton.styleFrom(
   backgroundColor: Colors.grey.shade400,
-  textStyle: TextStyle(
-    fontStyle: FontStyle.italic,
-    fontWeight: FontWeight.normal,
-  ),
+  // textStyle: TextStyle(
+  //   fontStyle: FontStyle.italic,
+  //   fontWeight: FontWeight.normal,
+  // ),
 );
 
 final ButtonStyle kChapterUnreadButtonStyle = OutlinedButton.styleFrom(

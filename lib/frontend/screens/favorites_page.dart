@@ -38,8 +38,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: Text("Favorites"),
         actions: [
           IconButton(
-            onPressed: () {
-              showSearch<SearchBook>(
+            onPressed: () async {
+              await showSearch<SearchBook>(
                 context: context,
                 delegate: CustomSearchDelegate(),
               );
@@ -52,6 +52,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         valueListenable: favBox.listenable(),
         builder: (context, box, child) {
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: box.length,
             itemBuilder: (context, index) {
               return BookCard(SearchBook.fromBook(box.getAt(index)));
@@ -62,14 +63,4 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 }
-// WatchBoxBuilder(
-// box: favBox,
-// builder: (BuildContext context, Box<dynamic> box) {
-// return ListView.builder(
-// itemCount: box.length,
-// itemBuilder: (context, index) {
-// return BookCard(SearchBook.fromBook(box.getAt(index) as Book));
-// },
-// );
-// },
-// ),
+// return BookCard(SearchBook.fromBook(box.getAt(index)));

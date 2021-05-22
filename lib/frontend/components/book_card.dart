@@ -23,12 +23,11 @@ class BookCard extends StatelessWidget {
             ));
       },
       child: Card(
-        margin: EdgeInsets.all(2.0),
         child: Column(
           children: [
             CachedNetworkImage(
               imageUrl: searchBook.thumbnail,
-              fit: BoxFit.scaleDown,
+              fit: BoxFit.fitWidth,
               httpHeaders: R.headers,
               placeholder: (context, url) => Icon(Icons.image_search),
             ),

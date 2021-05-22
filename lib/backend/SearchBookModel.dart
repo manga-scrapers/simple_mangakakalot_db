@@ -18,7 +18,13 @@ class SearchBook {
   SearchBook.fromBook(Book book) {
     this.thumbnail = book.thumbnail;
     this.bookName = book.bookName;
-    this.latestChapter = book.totalChaptersList[0].name;
+    try {
+      this.latestChapter = book.totalChaptersList.first.name;
+    } on Exception {
+      this.latestChapter = null;
+    } on Error {
+      this.latestChapter = null;
+    }
     this.authors = book.authors;
     this.bookLink = book.bookLink;
   }

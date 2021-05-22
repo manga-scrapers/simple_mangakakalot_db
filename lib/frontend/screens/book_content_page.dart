@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
+import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_content_heading.dart';
 import 'package:sample_mangakakalot_db/frontend/components/chapters_list_view.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
@@ -22,19 +23,24 @@ class BookContentPage extends StatefulWidget {
 class _BookContentPageState extends State<BookContentPage> {
   bool listViewReverse = false;
   Box<Book> booksCacheBox;
+  Box<Book> favBox;
+
+  bool isFavorite;
+  Book _book;
 
   @override
   void initState() {
     super.initState();
 
+    favBox = Hive.box<Book>(R.favorite_books);
+    isFavorite = favBox.containsKey(widget.searchBook.bookLink);
+
     // using books_cache instead of fav_books
     booksCacheBox = Hive.box<Book>(R.books_cache);
 
-    //todo: ??
-    // if (!booksCacheBox.containsKey(widget.searchBook.bookLink)) {
-    //   booksCacheBox.put(widget.searchBook.bookLink,
-    //       Book.generateFromSearchBook(widget.searchBook));
-    // }
+    //todo: the culprit
+    // _book = Book.generateFromSearchBook(widget.searchBook);
+    // var x = GenerateBookFromSearchBook(widget.searchBook).getBook();
   }
 
   @override
@@ -43,6 +49,31 @@ class _BookContentPageState extends State<BookContentPage> {
       appBar: AppBar(
         title: Text("Book Detail"),
         actions: [
+          IconButton(
+            onPressed: () async {
+              //todo: choose proper background color
+
+              if (_book.lastChapterRead == null) {
+                _book = await GenerateBookFromSearchBook(widget.searchBook)
+                    .getBook();
+              }
+              if (!isFavorite) {
+                BookStoringHandler.putWithCare(favBox, _book.bookLink, _book)
+                    .then((value) => print("value put ${_book.bookLink}"));
+              } else {
+                favBox
+                    .delete(_book.bookLink)
+                    .then((value) => print("del value  ${_book.bookLink}"));
+              }
+              setState(() {
+                isFavorite = favBox.containsKey(_book.bookLink);
+              });
+            },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_outline,
+              // color: Colors.pink,
+            ),
+          ),
           IconButton(
             onPressed: () {
               setState(() {
@@ -65,8 +96,11 @@ class _BookContentPageState extends State<BookContentPage> {
             future: GenerateBookFromSearchBook(widget.searchBook).getBook(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                _book = snapshot.data;
+
                 var book = snapshot.data;
-                booksCacheBox.put(book.bookLink, book);
+                BookStoringHandler.putWithCare(
+                    booksCacheBox, book.bookLink, book);
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -89,7 +123,7 @@ class _BookContentPageState extends State<BookContentPage> {
                             child: ChaptersListView(
                               listViewReverse: listViewReverse,
                               book: book,
-                              widget: widget,
+                              searchBook: widget.searchBook,
                             ),
                           ),
                         ],

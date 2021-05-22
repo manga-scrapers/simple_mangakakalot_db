@@ -16,10 +16,14 @@ class ReadingPage extends StatelessWidget {
   Future<List<PageOfChapter>> cacheImage(BuildContext context) async {
     _chapter.pages = await GenerateBookFromSearchBook(searchBook)
         .getPages(_chapter.chapterLink);
-
     for (var page in _chapter.pages) {
-      precacheImage(NetworkImage(page.pageLink, headers: R.headers), context)
-          .onError((error, stackTrace) => print(error.toString()));
+      try {
+        precacheImage(NetworkImage(page.pageLink, headers: R.headers), context);
+      } on Exception {
+        // print("Exception in caching: " + e.toString());
+      } on Error {
+        // print("Error in caching: " + e.toString());
+      }
     }
 
     return _chapter.pages;
@@ -42,6 +46,9 @@ class ReadingPage extends StatelessWidget {
         child: FutureBuilder<List<PageOfChapter>>(
             future: cacheImage(context),
             builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Icon(Icons.close, color: Colors.red));
+              }
               if (snapshot.hasData) {
                 var pages = snapshot.data;
                 return ListView.builder(
