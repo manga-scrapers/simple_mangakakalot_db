@@ -1,10 +1,16 @@
 
-name: "Code Scanning - Action"
+name: "CodeQL"
 
 on:
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
+    branches: [ main ]
   pull_request:
-  workflow_dispatch:    
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
   schedule:
     #        ┌───────────── minute (0 - 59)
     #        │  ┌───────────── hour (0 - 23)
