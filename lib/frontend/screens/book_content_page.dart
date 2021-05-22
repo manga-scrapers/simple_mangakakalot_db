@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
+import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_content_heading.dart';
 import 'package:sample_mangakakalot_db/frontend/components/chapters_list_view.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
@@ -32,7 +33,7 @@ class _BookContentPageState extends State<BookContentPage> {
 
     //todo: ??
     // if (!booksCacheBox.containsKey(widget.searchBook.bookLink)) {
-    //   booksCacheBox.put(widget.searchBook.bookLink,
+    //   BookStoringHandler.putWithCare(booksCacheBox,widget.searchBook.bookLink,
     //       Book.generateFromSearchBook(widget.searchBook));
     // }
   }
@@ -66,7 +67,8 @@ class _BookContentPageState extends State<BookContentPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 var book = snapshot.data;
-                booksCacheBox.put(book.bookLink, book);
+                BookStoringHandler.putWithCare(
+                    booksCacheBox, book.bookLink, book);
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

@@ -11,6 +11,7 @@ final ButtonStyle kChapterReadButtonStyle = OutlinedButton.styleFrom(
     fontStyle: FontStyle.italic,
     fontWeight: FontWeight.normal,
   ),
+  // animationDuration: Duration.zero,
 );
 
 final ButtonStyle kChapterUnreadButtonStyle = OutlinedButton.styleFrom(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
+import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/book_content_page.dart';
@@ -52,9 +53,10 @@ class _ChaptersListViewState extends State<ChaptersListView> {
           chapterButtonStyle = kChapterReadButtonStyle;
         }
 
+        // wrap with value listener
         return OutlinedButton(
           style: chapterButtonStyle,
-          onPressed: () async {
+          onPressed: () {
             widget.book.totalChaptersList[index].hasRead = true;
             widget.book.lastChapterRead = widget.book.totalChaptersList[index];
 
@@ -64,11 +66,13 @@ class _ChaptersListViewState extends State<ChaptersListView> {
             // });
 
             //todo : i think it's optional because book_content_page uses books_cache
-            favBooksBox.put(widget.book.bookLink, widget.book);
+            BookStoringHandler.putWithCare(
+                favBooksBox, widget.book.bookLink, widget.book);
 
-            booksCacheBox.put(widget.book.bookLink, widget.book);
+            BookStoringHandler.putWithCare(
+                booksCacheBox, widget.book.bookLink, widget.book);
 
-            await Navigator.push(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ReadingPage(
@@ -76,11 +80,11 @@ class _ChaptersListViewState extends State<ChaptersListView> {
                   widget.widget.searchBook,
                 ),
               ),
+            ).then(
+              (value) => chaptersBox
+                  .put(chapter.chapterLink, chapter)
+                  .then((value) => setState(() {})),
             );
-
-            setState(() {
-              chaptersBox.put(chapter.chapterLink, chapter);
-            });
           },
           child: Align(
             alignment: Alignment.centerLeft,

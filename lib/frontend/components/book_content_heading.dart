@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
+import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
@@ -20,6 +22,7 @@ class _BookContentHeadingState extends State<BookContentHeading> {
   bool isFavorite;
   Box<Book> favBox;
   Box<Book> booksCacheBox;
+  ValueListenable lastReadChapterListner;
 
   // Box<Chapter> chaptersCacheBox;
 
@@ -33,6 +36,8 @@ class _BookContentHeadingState extends State<BookContentHeading> {
     // chaptersCacheBox = Hive.box<Chapter>(R.chapters_cache);
 
     isFavorite = favBox.containsKey(widget._book.bookLink);
+    lastReadChapterListner =
+        booksCacheBox.listenable(keys: [widget._book.bookLink]);
   }
 
   Chapter getLastChapterRead(Box<Book> value) {
@@ -92,8 +97,9 @@ class _BookContentHeadingState extends State<BookContentHeading> {
                       onPressed: () {
                         //todo: choose proper background color
                         if (!isFavorite) {
-                          favBox.put(widget._book.bookLink, widget._book).then(
-                              (value) =>
+                          BookStoringHandler.putWithCare(
+                                  favBox, widget._book.bookLink, widget._book)
+                              .then((value) =>
                                   print("value put ${widget._book.bookLink}"));
                         } else {
                           favBox.delete(widget._book.bookLink).then((value) =>
@@ -124,8 +130,7 @@ class _BookContentHeadingState extends State<BookContentHeading> {
                       },
                       icon: Text("Read "),
                       label: ValueListenableBuilder<Box<Book>>(
-                        valueListenable: booksCacheBox
-                            .listenable(keys: [widget._book.bookLink]),
+                        valueListenable: lastReadChapterListner,
                         builder: (context, value, child) {
                           return HorizontalScrollableText(
                             getLastChapterRead(value).name,
