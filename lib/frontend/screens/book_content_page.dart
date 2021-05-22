@@ -50,20 +50,6 @@ class _BookContentPageState extends State<BookContentPage> {
         title: Text("Book Detail"),
         actions: [
           IconButton(
-            onPressed: () {
-              setState(() {
-                listViewReverse = !listViewReverse;
-              });
-            },
-            icon: Transform(
-              alignment: Alignment.center,
-              transform: listViewReverse
-                  ? Matrix4.rotationX(math.pi)
-                  : Matrix4.identity(),
-              child: Icon(Icons.sort),
-            ),
-          ),
-          IconButton(
             onPressed: () async {
               //todo: choose proper background color
 
@@ -85,7 +71,21 @@ class _BookContentPageState extends State<BookContentPage> {
             },
             icon: Icon(
               isFavorite ? Icons.favorite : Icons.favorite_outline,
-              color: Colors.pink,
+              // color: Colors.pink,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                listViewReverse = !listViewReverse;
+              });
+            },
+            icon: Transform(
+              alignment: Alignment.center,
+              transform: listViewReverse
+                  ? Matrix4.rotationX(math.pi)
+                  : Matrix4.identity(),
+              child: Icon(Icons.sort),
             ),
           ),
         ],

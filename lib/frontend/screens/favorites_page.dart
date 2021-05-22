@@ -52,6 +52,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         valueListenable: favBox.listenable(),
         builder: (context, box, child) {
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: box.length,
             itemBuilder: (context, index) {
               return BookCard(SearchBook.fromBook(box.getAt(index)));
@@ -62,3 +63,4 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 }
+// return BookCard(SearchBook.fromBook(box.getAt(index)));
