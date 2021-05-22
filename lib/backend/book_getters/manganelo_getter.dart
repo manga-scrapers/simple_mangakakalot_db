@@ -92,7 +92,7 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
     try {
       var doc = parse(document.querySelectorAll("td.table-value")[3].innerHtml);
       return doc.querySelectorAll("a.a-h").map((e) => e.text.trim()).toList();
-    } on Exception catch (e) {
+    } on Exception {
       return [];
     }
   }
@@ -105,7 +105,7 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
           document.querySelector("em[property=\"v:best\"]").text.trim());
       var rating = ratingAvg / ratingBest * 10;
       return rating;
-    } on Exception catch (e) {
+    } on Exception {
       return -1;
     }
   }

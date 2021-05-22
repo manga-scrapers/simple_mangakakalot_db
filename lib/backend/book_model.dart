@@ -18,7 +18,7 @@ class Book {
   //todo: finding latestChapter
   ///todo: determine datatype
   @HiveField(4)
-  Chapter currentChapter;
+  Chapter lastChapterRead;
 
   @HiveField(5)
   String summary;
@@ -35,7 +35,7 @@ class Book {
     this.authors,
     this.thumbnail,
     this.bookName,
-    this.currentChapter,
+    this.lastChapterRead,
     this.summary,
     this.rating,
     this.genres,

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
@@ -18,6 +19,9 @@ class BookContentHeading extends StatefulWidget {
 class _BookContentHeadingState extends State<BookContentHeading> {
   bool isFavorite;
   Box<Book> favBox;
+  Box<Book> booksCacheBox;
+
+  // Box<Chapter> chaptersCacheBox;
 
   @override
   void initState() {
@@ -25,15 +29,26 @@ class _BookContentHeadingState extends State<BookContentHeading> {
 
     // TODO: implement initState
     favBox = Hive.box<Book>(R.favorite_books);
+    booksCacheBox = Hive.box<Book>(R.books_cache);
+    // chaptersCacheBox = Hive.box<Chapter>(R.chapters_cache);
 
     isFavorite = favBox.containsKey(widget._book.bookLink);
+  }
+
+  Chapter getLastChapterRead(Box<Book> value) {
+    Book widgetBook = widget._book;
+    if (value.containsKey(widgetBook.bookLink)) {
+      if (value.get(widgetBook.bookLink).lastChapterRead != null) {
+        return value.get(widgetBook.bookLink).lastChapterRead;
+      }
+    }
+    return widgetBook.totalChaptersList.last;
   }
 
   @override
   Widget build(BuildContext context) {
     precacheImage(NetworkImage(widget._book.thumbnail), context);
 
-    var currentChapter = widget._book.currentChapter ?? Chapter(name: "0");
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
         child: CachedNetworkImage(
@@ -72,44 +87,56 @@ class _BookContentHeadingState extends State<BookContentHeading> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      //todo: change background color
-                      if (!isFavorite) {
-                        favBox.put(widget._book.bookLink, widget._book).then(
-                            (value) =>
-                                print("value put ${widget._book.bookLink}"));
-                      } else {
-                        favBox.delete(widget._book.bookLink).then((value) =>
-                            print("del value  ${widget._book.bookLink}"));
-                      }
-                      setState(() {
-                        isFavorite = favBox.containsKey(widget._book.bookLink);
-                      });
-                    },
-                    icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_outline),
-                    label: Text(isFavorite ? "Favorited" : "Favorite"),
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor:
-                          isFavorite ? Colors.orange : Colors.orange.shade200,
-                      textStyle: TextStyle(
-                        color: Colors.black,
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        //todo: choose proper background color
+                        if (!isFavorite) {
+                          favBox.put(widget._book.bookLink, widget._book).then(
+                              (value) =>
+                                  print("value put ${widget._book.bookLink}"));
+                        } else {
+                          favBox.delete(widget._book.bookLink).then((value) =>
+                              print("del value  ${widget._book.bookLink}"));
+                        }
+                        setState(() {
+                          isFavorite =
+                              favBox.containsKey(widget._book.bookLink);
+                        });
+                      },
+                      icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_outline),
+                      label: Text(isFavorite ? "Favorited" : "Favorite"),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor:
+                            isFavorite ? Colors.orange : Colors.orange.shade200,
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(width: 20.0),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      //todo: goto page
-                    },
-                    icon: Text("Read "),
-                    label: Text(
-                      "${currentChapter.name}",
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.fade,
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        //todo: goto page
+                      },
+                      icon: Text("Read "),
+                      label: ValueListenableBuilder<Box<Book>>(
+                        valueListenable: booksCacheBox
+                            .listenable(keys: [widget._book.bookLink]),
+                        builder: (context, value, child) {
+                          return HorizontalScrollableText(
+                            getLastChapterRead(value).name,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.fade,
+                          );
+                        },
+                      ),
                     ),
                   ),
+                  SizedBox(width: 2.0),
                 ],
               ),
             ),
@@ -119,3 +146,12 @@ class _BookContentHeadingState extends State<BookContentHeading> {
     ]);
   }
 }
+// HorizontalScrollableText(
+// "${lastChapterRead.name}",
+// textAlign: TextAlign.center,
+// overflow: TextOverflow.fade,
+// );
+// value
+//     .get(widget._book.bookLink)
+// .lastChapterRead
+//     .name

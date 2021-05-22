@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
+import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/book_content_page.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/reading_page.dart';
+import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
-class ChaptersListView extends StatelessWidget {
+class ChaptersListView extends StatefulWidget {
   const ChaptersListView({
     Key key,
     @required this.listViewReverse,
@@ -17,28 +20,72 @@ class ChaptersListView extends StatelessWidget {
   final BookContentPage widget;
 
   @override
+  _ChaptersListViewState createState() => _ChaptersListViewState();
+}
+
+class _ChaptersListViewState extends State<ChaptersListView> {
+  Box<Chapter> chaptersBox;
+  Box<Book> favBooksBox;
+  Box<Book> booksCacheBox;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO: implement initState
+    chaptersBox = Hive.box<Chapter>(R.chapters_cache);
+    favBooksBox = Hive.box<Book>(R.favorite_books);
+    booksCacheBox = Hive.box<Book>(R.books_cache);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      reverse: listViewReverse,
+      reverse: widget.listViewReverse,
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      itemCount: book.totalChaptersList.length,
+      itemCount: widget.book.totalChaptersList.length,
       itemBuilder: (context, index) {
+        var chapter = widget.book.totalChaptersList[index];
+
+        ButtonStyle chapterButtonStyle = kChapterUnreadButtonStyle;
+        if (chaptersBox.containsKey(chapter.chapterLink)) {
+          chapterButtonStyle = kChapterReadButtonStyle;
+        }
+
         return OutlinedButton(
-          onPressed: () {
-            book.totalChaptersList[index].hasRead = true;
-            book.currentChapter = book.totalChaptersList[index];
-            Navigator.push(
+          style: chapterButtonStyle,
+          onPressed: () async {
+            widget.book.totalChaptersList[index].hasRead = true;
+            widget.book.lastChapterRead = widget.book.totalChaptersList[index];
+
+            //todo: does changing order matter?
+            // setState(() {
+            // chaptersBox.put(chapter.chapterLink, chapter);
+            // });
+
+            //todo : i think it's optional because book_content_page uses books_cache
+            favBooksBox.put(widget.book.bookLink, widget.book);
+
+            booksCacheBox.put(widget.book.bookLink, widget.book);
+
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ReadingPage(
-                    book.totalChaptersList[index], widget.searchBook),
+                  widget.book.totalChaptersList[index],
+                  widget.widget.searchBook,
+                ),
               ),
             );
+
+            setState(() {
+              chaptersBox.put(chapter.chapterLink, chapter);
+            });
           },
           child: Align(
             alignment: Alignment.centerLeft,
             child: HorizontalScrollableText(
-              book.totalChaptersList[index].name,
+              widget.book.totalChaptersList[index].name,
               style: TextStyle(
                 color: Colors.black,
               ),

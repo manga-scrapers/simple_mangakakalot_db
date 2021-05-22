@@ -21,14 +21,20 @@ class BookContentPage extends StatefulWidget {
 
 class _BookContentPageState extends State<BookContentPage> {
   bool listViewReverse = false;
-  Box<Book> box;
+  Box<Book> booksCacheBox;
 
   @override
   void initState() {
     super.initState();
 
-    // TODO: implement initState
-    box = Hive.box<Book>(R.books_cache);
+    // using books_cache instead of fav_books
+    booksCacheBox = Hive.box<Book>(R.books_cache);
+
+    //todo: ??
+    // if (!booksCacheBox.containsKey(widget.searchBook.bookLink)) {
+    //   booksCacheBox.put(widget.searchBook.bookLink,
+    //       Book.generateFromSearchBook(widget.searchBook));
+    // }
   }
 
   @override
@@ -55,12 +61,12 @@ class _BookContentPageState extends State<BookContentPage> {
       ),
       body: SafeArea(
         child: FutureBuilder<Book>(
-            initialData: box.get(widget.searchBook.bookLink),
+            initialData: booksCacheBox.get(widget.searchBook.bookLink),
             future: GenerateBookFromSearchBook(widget.searchBook).getBook(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 var book = snapshot.data;
-                box.put(book.bookLink, book);
+                booksCacheBox.put(book.bookLink, book);
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

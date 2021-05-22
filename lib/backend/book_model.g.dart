@@ -21,7 +21,7 @@ class BookAdapter extends TypeAdapter<Book> {
       authors: fields[1] as String,
       thumbnail: fields[2] as String,
       bookName: fields[3] as String,
-      currentChapter: fields[4] as Chapter,
+      lastChapterRead: fields[4] as Chapter,
       summary: fields[5] as String,
       rating: fields[6] as double,
       genres: (fields[7] as List)?.cast<String>(),
@@ -42,7 +42,7 @@ class BookAdapter extends TypeAdapter<Book> {
       ..writeByte(3)
       ..write(obj.bookName)
       ..writeByte(4)
-      ..write(obj.currentChapter)
+      ..write(obj.lastChapterRead)
       ..writeByte(5)
       ..write(obj.summary)
       ..writeByte(6)

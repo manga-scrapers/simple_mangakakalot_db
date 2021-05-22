@@ -16,17 +16,17 @@ class ReadingPage extends StatelessWidget {
   Future<List<PageOfChapter>> cacheImage(BuildContext context) async {
     _chapter.pages = await GenerateBookFromSearchBook(searchBook)
         .getPages(_chapter.chapterLink);
+
     for (var page in _chapter.pages) {
-      precacheImage(NetworkImage(page.pageLink, headers: R.headers), context);
+      precacheImage(NetworkImage(page.pageLink, headers: R.headers), context)
+          .onError((error, stackTrace) => print(error.toString()));
     }
+
     return _chapter.pages;
   }
 
   @override
   Widget build(BuildContext context) {
-    /// todo: better implementation
-    cacheImage(context);
-    // var box = Hive.box<PageOfChapter(R.pages_cache);
     return Scaffold(
       backgroundColor: ThemeData.dark().scaffoldBackgroundColor,
       appBar: AppBar(

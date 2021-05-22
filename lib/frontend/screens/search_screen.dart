@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/GetBooksFromSearch.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/frontend/components/search_card.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/book_content_page.dart';
-import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class CustomSearchDelegate extends SearchDelegate<SearchBook> {
   @override
