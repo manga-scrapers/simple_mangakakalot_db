@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/constants.dart';
@@ -13,12 +14,12 @@ class ChaptersListView extends StatefulWidget {
     Key key,
     @required this.listViewReverse,
     @required this.book,
-    @required this.widget,
+    @required this.searchBook,
   }) : super(key: key);
 
   final bool listViewReverse;
   final Book book;
-  final BookContentPage widget;
+  final SearchBook searchBook;
 
   @override
   _ChaptersListViewState createState() => _ChaptersListViewState();
@@ -39,6 +40,14 @@ class _ChaptersListViewState extends State<ChaptersListView> {
     booksCacheBox = Hive.box<Book>(R.books_cache);
   }
 
+  ButtonStyle getChapterButtonStyle(Chapter chapter) {
+    if (chaptersBox.containsKey(chapter.chapterLink)) {
+      return kChapterReadButtonStyle;
+    } else {
+      return kChapterUnreadButtonStyle;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -48,54 +57,60 @@ class _ChaptersListViewState extends State<ChaptersListView> {
       itemBuilder: (context, index) {
         var chapter = widget.book.totalChaptersList[index];
 
-        ButtonStyle chapterButtonStyle = kChapterUnreadButtonStyle;
-        if (chaptersBox.containsKey(chapter.chapterLink)) {
-          chapterButtonStyle = kChapterReadButtonStyle;
-        }
+        //todo: is this the cause??
+        ButtonStyle chapterButtonStyle = getChapterButtonStyle(chapter);
 
-        // wrap with value listener
-        return OutlinedButton(
-          style: chapterButtonStyle,
-          onPressed: () {
-            widget.book.totalChaptersList[index].hasRead = true;
-            widget.book.lastChapterRead = widget.book.totalChaptersList[index];
+        try {
+          return OutlinedButton(
+            // key: ValueKey(chaptersBox.get(chapter.chapterLink) ?? 0), //todo:
+            style: chapterButtonStyle,
+            onPressed: () async {
+              widget.book.totalChaptersList[index].hasRead = true;
+              widget.book.lastChapterRead =
+                  widget.book.totalChaptersList[index];
 
-            //todo: does changing order matter?
-            // setState(() {
-            // chaptersBox.put(chapter.chapterLink, chapter);
-            // });
+              //todo: does changing order matter?
+              // setState(() {
+              await chaptersBox.put(chapter.chapterLink, chapter);
+              // });
 
-            //todo : i think it's optional because book_content_page uses books_cache
-            BookStoringHandler.putWithCare(
-                favBooksBox, widget.book.bookLink, widget.book);
+              //todo : i think it's optional because book_content_page uses books_cache
+              BookStoringHandler.putWithCare(
+                  favBooksBox, widget.book.bookLink, widget.book);
 
-            BookStoringHandler.putWithCare(
-                booksCacheBox, widget.book.bookLink, widget.book);
+              BookStoringHandler.putWithCare(
+                  booksCacheBox, widget.book.bookLink, widget.book);
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ReadingPage(
-                  widget.book.totalChaptersList[index],
-                  widget.widget.searchBook,
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReadingPage(
+                    widget.book.totalChaptersList[index],
+                    widget.searchBook,
+                  ),
+                ),
+              );
+
+              // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              setState(() {
+                chaptersBox.put(chapter.chapterLink, chapter);
+              });
+              // });
+            },
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: HorizontalScrollableText(
+                widget.book.totalChaptersList[index].name,
+                style: TextStyle(
+                  color: Colors.black,
                 ),
               ),
-            ).then(
-              (value) => chaptersBox
-                  .put(chapter.chapterLink, chapter)
-                  .then((value) => setState(() {})),
-            );
-          },
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: HorizontalScrollableText(
-              widget.book.totalChaptersList[index].name,
-              style: TextStyle(
-                color: Colors.black,
-              ),
             ),
-          ),
-        );
+          );
+        } on Exception catch (e) {
+          print("Error in OutlinedButton: " + e.toString());
+          return OutlinedButton(onPressed: () {}, child: Text("loading..."));
+        }
       },
     );
   }

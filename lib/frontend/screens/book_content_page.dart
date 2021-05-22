@@ -23,19 +23,24 @@ class BookContentPage extends StatefulWidget {
 class _BookContentPageState extends State<BookContentPage> {
   bool listViewReverse = false;
   Box<Book> booksCacheBox;
+  Box<Book> favBox;
+
+  bool isFavorite;
+  Book _book;
 
   @override
   void initState() {
     super.initState();
 
+    favBox = Hive.box<Book>(R.favorite_books);
+    isFavorite = favBox.containsKey(widget.searchBook.bookLink);
+
     // using books_cache instead of fav_books
     booksCacheBox = Hive.box<Book>(R.books_cache);
 
-    //todo: ??
-    // if (!booksCacheBox.containsKey(widget.searchBook.bookLink)) {
-    //   BookStoringHandler.putWithCare(booksCacheBox,widget.searchBook.bookLink,
-    //       Book.generateFromSearchBook(widget.searchBook));
-    // }
+    //todo: the culprit
+    // _book = Book.generateFromSearchBook(widget.searchBook);
+    // var x = GenerateBookFromSearchBook(widget.searchBook).getBook();
   }
 
   @override
@@ -58,6 +63,31 @@ class _BookContentPageState extends State<BookContentPage> {
               child: Icon(Icons.sort),
             ),
           ),
+          IconButton(
+            onPressed: () async {
+              //todo: choose proper background color
+
+              if (_book.lastChapterRead == null) {
+                _book = await GenerateBookFromSearchBook(widget.searchBook)
+                    .getBook();
+              }
+              if (!isFavorite) {
+                BookStoringHandler.putWithCare(favBox, _book.bookLink, _book)
+                    .then((value) => print("value put ${_book.bookLink}"));
+              } else {
+                favBox
+                    .delete(_book.bookLink)
+                    .then((value) => print("del value  ${_book.bookLink}"));
+              }
+              setState(() {
+                isFavorite = favBox.containsKey(_book.bookLink);
+              });
+            },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_outline,
+              color: Colors.pink,
+            ),
+          ),
         ],
       ),
       body: SafeArea(
@@ -66,6 +96,8 @@ class _BookContentPageState extends State<BookContentPage> {
             future: GenerateBookFromSearchBook(widget.searchBook).getBook(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                _book = snapshot.data;
+
                 var book = snapshot.data;
                 BookStoringHandler.putWithCare(
                     booksCacheBox, book.bookLink, book);
@@ -91,7 +123,7 @@ class _BookContentPageState extends State<BookContentPage> {
                             child: ChaptersListView(
                               listViewReverse: listViewReverse,
                               book: book,
-                              widget: widget,
+                              searchBook: widget.searchBook,
                             ),
                           ),
                         ],

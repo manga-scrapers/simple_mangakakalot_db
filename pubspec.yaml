@@ -21,6 +21,7 @@ dependencies:
   cached_network_image: ^3.0.0
   hive: ^2.0.4
   hive_flutter: ^1.0.0
+  marquee: ^2.1.0
 
 dev_dependencies:
   flutter_test:
