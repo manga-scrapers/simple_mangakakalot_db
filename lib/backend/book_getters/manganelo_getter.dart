@@ -1,9 +1,9 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
-import 'package:sample_mangakakalot_db/backend/getter_selector.dart';
+import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 
 class ManganeloGetter implements GenerateBookFromSearchBook {
   SearchBook searchBook;
@@ -30,12 +30,12 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
 
     book.rating = getRating(document);
 
-    book.totalChaptersList = await getChapters(document);
+    book.totalChaptersList = getChapters(document);
     // print(book); //todo: debug only
     return book; //todo verify again from here
   }
 
-  Future<List<Chapter>> getChapters(Document document) async {
+  List<Chapter> getChapters(Document document) {
     List<Chapter> chaptersList = [];
 
     var allChapters =
@@ -49,7 +49,9 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
           doc.querySelector("a[href]").attributes['href'].trim();
       chapter.name = doc.querySelector("a[href]").text.trim();
       chapter.date = doc.querySelectorAll("span")[1].text.trim();
-      chapter.pages = await getPages(chapter.chapterLink);
+
+      //todo:
+      chapter.pages = []; // await getPages(chapter.chapterLink);
 
       chaptersList.add(chapter);
 
@@ -87,18 +89,24 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
   }
 
   List<String> getGenres(Document document) {
-    var doc = parse(document.querySelectorAll("td.table-value")[3].innerHtml);
-    return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
+    try {
+      var doc = parse(document.querySelectorAll("td.table-value")[3].innerHtml);
+      return doc.querySelectorAll("a.a-h").map((e) => e.text.trim()).toList();
+    } on Exception {
+      return [];
+    }
   }
 
   double getRating(Document document) {
-    var ratingAvg = double.parse(
-        document.querySelector("em[property=\"v:average\"]").text.trim());
-    var ratingBest = double.parse(
-        document.querySelector("em[property=\"v:best\"]").text.trim());
-    var rating = ratingAvg / ratingBest * 10;
-    // print(rating);
-    // print(rating.toStringAsFixed(2));
-    return rating;
+    try {
+      var ratingAvg = double.parse(
+          document.querySelector("em[property=\"v:average\"]").text.trim());
+      var ratingBest = double.parse(
+          document.querySelector("em[property=\"v:best\"]").text.trim());
+      var rating = ratingAvg / ratingBest * 10;
+      return rating;
+    } on Exception {
+      return -1;
+    }
   }
 }

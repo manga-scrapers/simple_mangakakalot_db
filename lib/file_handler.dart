@@ -16,7 +16,7 @@ class FileHandler {
 
   Future<File> get localFile async {
     final path = await _localPath;
-    return File('$path/$fileName');
+    return File('$path/$fileName/');
   }
 
   /// todo: for testing purposes

@@ -1,9 +1,9 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
-import 'package:sample_mangakakalot_db/backend/BookModel.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
-import 'package:sample_mangakakalot_db/backend/getter_selector.dart';
+import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
+import 'package:sample_mangakakalot_db/backend/book_model.dart';
 
 class MangakakalotGetter implements GenerateBookFromSearchBook {
   SearchBook searchBook;
@@ -29,19 +29,18 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
 
     try {
       book.rating = getRating(document);
-    } on Exception catch (e) {
+    } on Exception {
       // TODO
       book.rating = 0.0;
     }
 
-    book.totalChaptersList = await getChapters(document);
+    book.totalChaptersList = getChapters(document);
     // print(book); //todo: debug only
     return book; //todo verify again from here
   }
 
-  Future<List<Chapter>> getChapters(Document document) async {
+  List<Chapter> getChapters(Document document) {
     List<Chapter> chaptersList = [];
-
     var allChapters = document.querySelectorAll("div.chapter-list > div.row");
 
     for (var each_chapter in allChapters) {
@@ -52,10 +51,11 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
           doc.querySelector("a[href]").attributes['href'].trim();
       chapter.name = doc.querySelector("a[href]").text.trim();
       chapter.date = doc.querySelectorAll("span")[2].text.trim();
-      chapter.pages = await getPages(chapter.chapterLink);
+
+      //todo:
+      chapter.pages = []; //await getPages(chapter.chapterLink);
 
       chaptersList.add(chapter);
-
       // print(chapter); //todo: debug only
     }
     return chaptersList;
@@ -90,18 +90,26 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
   }
 
   List<String> getGenres(Document document) {
-    var doc = parse(
-        document.querySelectorAll("ul.manga-info-text > li")[6].innerHtml);
-    return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
+    try {
+      var doc = parse(
+          document.querySelectorAll("ul.manga-info-text > li")[6].innerHtml);
+      return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
+    } on Exception {
+      return [];
+    }
   }
 
   double getRating(Document document) {
-    var ratingText = document.querySelector("em#rate_row_cmd").text.trim();
-    var regexp = RegExp(r"(\d+\.?\d+)(\s+\/\s+)(\d+)", caseSensitive: true);
-    var match = regexp.firstMatch(ratingText);
-    double rating = double.parse(match.group(1).trim()) /
-        double.parse(match.group(3).trim()) *
-        10;
-    return rating;
+    try {
+      var ratingText = document.querySelector("em#rate_row_cmd").text.trim();
+      var regexp = RegExp(r"(\d+\.?\d+)(\s+\/\s+)(\d+)", caseSensitive: true);
+      var match = regexp.firstMatch(ratingText);
+      double rating = double.parse(match.group(1).trim()) /
+          double.parse(match.group(3).trim()) *
+          10;
+      return rating;
+    } on Exception {
+      return -1;
+    }
   }
 }
