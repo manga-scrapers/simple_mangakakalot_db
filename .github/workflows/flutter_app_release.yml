@@ -25,14 +25,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-
-      - name: Generate key.jks
       - run: echo $SIGNING_KEY | base64 -d > android/app/key.jks
-          env:
-            SIGNING_KEY: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+        env:
+          SIGNING_KEY: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
 
       # Setup the flutter environment.
-      - name: Setting up flutter environment
       - uses: subosito/flutter-action@v1
         with:
           channel: 'beta' # 'dev', 'alpha', default to: 'stable'
@@ -59,9 +56,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PATH: key.jks
-            
 
-      
       # Upload generated apk to the artifacts.
       - name: Release apk
       - uses: actions/upload-artifact@v1
