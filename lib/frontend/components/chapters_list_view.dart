@@ -5,7 +5,6 @@ import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
-import 'package:sample_mangakakalot_db/frontend/screens/book_content_page.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/reading_page.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
