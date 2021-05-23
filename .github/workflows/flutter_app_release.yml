@@ -60,4 +60,4 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
-          path: Built build/app/outputs/flutter-apk/
+          path: build/app/outputs/flutter-apk/
