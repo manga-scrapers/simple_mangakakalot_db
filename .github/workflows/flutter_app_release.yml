@@ -62,6 +62,6 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          path: build/app/outputs/apk/release/*.apk
     
     
