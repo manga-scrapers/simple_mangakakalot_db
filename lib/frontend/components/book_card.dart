@@ -1,8 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
-import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/book_content_page.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
@@ -29,7 +29,7 @@ class BookCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(
+            Expanded(
               flex: 5,
               child: CachedNetworkImage(
                 fit: BoxFit.fill,
@@ -39,14 +39,14 @@ class BookCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 2.0),
-            Flexible(
+            Expanded(
               child: HorizontalScrollableText(
                 searchBook.bookName,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(width: 2.0),
-            Flexible(
+            Expanded(
               child: HorizontalScrollableText(
                 searchBook.latestChapter,
               ),

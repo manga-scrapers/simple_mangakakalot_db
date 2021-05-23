@@ -65,7 +65,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               return BookCard(SearchBook.fromBook(box.getAt(index)));
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
+              crossAxisCount: 3,
               childAspectRatio: 9 / 16,
             ),
           );

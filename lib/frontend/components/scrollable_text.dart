@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalScrollableText extends StatelessWidget {
@@ -11,7 +12,7 @@ class HorizontalScrollableText extends StatelessWidget {
   HorizontalScrollableText(
     this.data, {
     this.style,
-    this.textAlign = TextAlign.end,
+    this.textAlign = TextAlign.center,
     this.overflow = TextOverflow.fade,
     this.alignment = Alignment.center,
     this.padding = const EdgeInsets.all(2.0),
@@ -19,18 +20,19 @@ class HorizontalScrollableText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Align(
-        alignment: alignment,
+    return Align(
+      alignment: alignment,
+      child: Padding(
+        padding: padding,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Text(
+          child: AutoSizeText(
             data,
             style: style,
             softWrap: false,
             textAlign: textAlign,
             overflow: overflow,
+            minFontSize: 16,
           ),
         ),
       ),
