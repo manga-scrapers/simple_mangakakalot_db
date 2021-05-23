@@ -9,8 +9,6 @@
 name: Codacy Security Scan
 
 on:
-  workflow_dispatch:
-    
   push:
     branches: [ main ]
   pull_request:
@@ -18,6 +16,8 @@ on:
     branches: [ main , develop ]
   schedule:
     - cron: '30 16 * * *'
+  
+  workflow_dispatch:
 
 jobs:
   codacy-security-scan:
