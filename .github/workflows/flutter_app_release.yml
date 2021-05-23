@@ -1,11 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Flutter - apk builder
+name: Flutter - Test, Build and Release apk
 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
+    tags:
+      - 'v*'
     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -24,7 +26,13 @@ jobs:
         with:
           java-version: '12.x'
 
+      - name: Generate key.jks
+      - run: echo $SIGNING_KEY | base64 -d > android/app/key.jks
+          env:
+            SIGNING_KEY: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+
       # Setup the flutter environment.
+      - name: Setting up flutter environment
       - uses: subosito/flutter-action@v1
         with:
           channel: 'beta' # 'dev', 'alpha', default to: 'stable'
@@ -44,24 +52,18 @@ jobs:
       - run: flutter test
 
       # Build apk.
-#       - run: flutter build apk/
-      
-            
-      - uses: r0adkll/sign-android-release@v1
-        name: Sign app APK
-        # ID used to access action output
-        id: sign_app
-        with:
-          releaseDirectory: build/app/outputs/apk/release/
-          signingKeyBase64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}
+      - name: Build apk
+      - run: flutter build apk --split-per-abi
         env:
-          # override default build-tools version (29.0.3) -- optional
-          BUILD_TOOLS_VERSION: "30.0.2"
+          KEY_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PATH: key.jks
+            
+
       
       # Upload generated apk to the artifacts.
+      - name: Release apk
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
