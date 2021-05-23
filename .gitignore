@@ -4,6 +4,8 @@ temp.*
 tests/res/
 assets/res/
 
+key.*
+
 # Miscellaneous
 *.class
 *.log
