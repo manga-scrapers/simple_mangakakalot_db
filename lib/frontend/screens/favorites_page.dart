@@ -18,6 +18,8 @@ class FavoritesPage extends StatefulWidget {
 class _FavoritesPageState extends State<FavoritesPage> {
   Box<Book> favBox;
 
+  int crossAxisCount = 3;
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +34,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
     // }
 
     // getBook();
+
+    if (crossAxisCount == null || crossAxisCount == 0) crossAxisCount = 3;
+    // else {
+    //   var width = MediaQuery.of(context).size.width;
+    //   crossAxisCount = MediaQuery.of(context).size.width.round();
+    // }
     return Scaffold(
       appBar: AppBar(
         title: Text("Favorites"),
@@ -57,8 +65,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
               return BookCard(SearchBook.fromBook(box.getAt(index)));
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 9 / 16.5,
+              crossAxisCount: 5,
+              childAspectRatio: 9 / 16,
             ),
           );
         },
