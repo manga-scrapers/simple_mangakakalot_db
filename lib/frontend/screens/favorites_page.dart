@@ -22,7 +22,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
   void initState() {
     super.initState();
 
-    // TODO: implement initState
     favBox = Hive.box<Book>(R.favorite_books);
   }
 
@@ -51,12 +50,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
       body: ValueListenableBuilder<Box<Book>>(
         valueListenable: favBox.listenable(),
         builder: (context, box, child) {
-          return ListView.builder(
-            shrinkWrap: true,
+          return GridView.builder(
+            // shrinkWrap: true,
             itemCount: box.length,
             itemBuilder: (context, index) {
               return BookCard(SearchBook.fromBook(box.getAt(index)));
             },
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 9 / 16,
+            ),
           );
         },
       ),
