@@ -58,7 +58,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
-              childAspectRatio: 9 / 16,
+              childAspectRatio: 9 / 16.5,
             ),
           );
         },
