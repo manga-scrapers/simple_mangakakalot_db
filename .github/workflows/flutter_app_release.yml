@@ -49,7 +49,6 @@ jobs:
       - run: flutter test
 
       # Build apk.
-      - name: Build apk
       - run: flutter build apk --split-per-abi
         env:
           KEY_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -58,7 +57,6 @@ jobs:
           KEY_PATH: key.jks
 
       # Upload generated apk to the artifacts.
-      - name: Release apk
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
