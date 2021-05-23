@@ -1,5 +1,4 @@
-
-[![Flutter CI](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/flutter.yml/badge.svg)](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/flutter.yml)   [![Codacy Security Scan](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/codacy-analysis.yml) 
+[![Flutter - Analyzer and Tests](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/flutter_analyzer_tests.yml/badge.svg)](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/flutter_analyzer_tests.yml)    [![Codacy Security Scan](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/codacy-analysis.yml/badge.svg)](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/codacy-analysis.yml)   [![Flutter - apk builder](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/flutter_app_release.yml/badge.svg)](https://github.com/manga-scrapers/simple_mangakakalot_db/actions/workflows/flutter_app_release.yml)
  
 
 
