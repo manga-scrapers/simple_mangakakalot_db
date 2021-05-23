@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
@@ -10,6 +11,14 @@ void main() async {
   await Hive.initFlutter("hive");
 
   await loadHiveAdaptersAndBoxes();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //todo: required to set "Requires full screen" to true  for ios
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(MyApp());
 }

@@ -26,10 +26,12 @@ class BookCard extends StatelessWidget {
       child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               height: 160,
               child: CachedNetworkImage(
+                memCacheHeight: 160,
                 imageUrl: searchBook.thumbnail,
                 httpHeaders: R.headers,
                 placeholder: (context, url) => Icon(Icons.image_search),
