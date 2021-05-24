@@ -63,14 +63,14 @@ class _ChaptersListViewState extends State<ChaptersListView> {
           return OutlinedButton(
             // key: ValueKey(chaptersBox.get(chapter.chapterLink) ?? 0), //todo:
             style: chapterButtonStyle,
-            onPressed: () async {
+            onPressed: () {
               widget.book.totalChaptersList[index].hasRead = true;
               widget.book.lastChapterRead =
                   widget.book.totalChaptersList[index];
 
               //todo: does changing order matter?
               // setState(() {
-              await chaptersBox.put(chapter.chapterLink, chapter);
+              // await chaptersBox.put(chapter.chapterLink, chapter);
               // });
 
               //todo : i think it's optional because book_content_page uses books_cache
@@ -80,7 +80,7 @@ class _ChaptersListViewState extends State<ChaptersListView> {
               BookStoringHandler.putWithCare(
                   booksCacheBox, widget.book.bookLink, widget.book);
 
-              await Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ReadingPage(

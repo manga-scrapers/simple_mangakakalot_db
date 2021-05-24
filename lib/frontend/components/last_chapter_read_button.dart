@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -35,10 +36,10 @@ class _LastChapterReadButtonState extends State<LastChapterReadButton> {
         style: OutlinedButton.styleFrom(
             textStyle:
                 Theme.of(context).textTheme.button.copyWith(fontSize: 16.0)),
-        onPressed: () async {
+        onPressed: () {
           //todo
 
-          await Navigator.push(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ReadingPage(
@@ -50,7 +51,7 @@ class _LastChapterReadButtonState extends State<LastChapterReadButton> {
         },
         child: Row(
           children: [
-            Expanded(child: Text(" Read")),
+            Expanded(child: AutoSizeText(" Read")),
             SizedBox(width: 2.0),
             ValueListenableBuilder<Box<Book>>(
               valueListenable: widget.lastReadChapterListener,
