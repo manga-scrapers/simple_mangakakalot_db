@@ -46,6 +46,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
         actions: [
           IconButton(
             onPressed: () async {
+              //todo: don't await when you want to return back to fav page
+              // change close method for it
               await showSearch<SearchBook>(
                 context: context,
                 delegate: CustomSearchDelegate(),
@@ -58,6 +60,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
       body: ValueListenableBuilder<Box<Book>>(
         valueListenable: favBox.listenable(),
         builder: (context, box, child) {
+          if (favBox.isEmpty) {
+            return Center(
+              child: Text("Favorited books appear here"),
+            );
+          }
+
           return GridView.builder(
             // shrinkWrap: true,
             itemCount: box.length,
