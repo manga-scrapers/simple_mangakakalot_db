@@ -20,9 +20,7 @@ class SearchBook {
     this.bookName = book.bookName;
     try {
       this.latestChapter = book.totalChaptersList.first.name;
-    } on Exception {
-      this.latestChapter = null;
-    } on Error {
+    } catch (e) {
       this.latestChapter = null;
     }
     this.authors = book.authors;

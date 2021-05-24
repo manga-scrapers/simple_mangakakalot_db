@@ -106,7 +106,7 @@ class _ChaptersListViewState extends State<ChaptersListView> {
               ),
             ),
           );
-        } on Exception catch (e) {
+        } catch (e) {
           print("Error in OutlinedButton: " + e.toString());
           return OutlinedButton(onPressed: () {}, child: Text("loading..."));
         }

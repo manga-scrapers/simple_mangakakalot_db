@@ -46,71 +46,74 @@ class _FavoritesPageState extends State<FavoritesPage> {
     //   crossAxisCount = MediaQuery.of(context).size.width.round();
     // }
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(R.icon_location),
-              )),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: AutoSizeText(
-                  'Manga Reader',
-                  minFontSize: 20.0,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: "Ariel",
+      drawer: Container(
+        width: MediaQuery.of(context).size.shortestSide * 1 / 2,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage(R.icon_location),
+                )),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AutoSizeText(
+                    'Manga Reader',
+                    minFontSize: 20.0,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Ariel",
+                    ),
                   ),
                 ),
               ),
-            ),
-            FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var packageInfo = snapshot.data;
-                    return AboutListTile(
-                      icon: FaIcon(FontAwesomeIcons.questionCircle),
-                      child: AutoSizeText(
-                        "About",
-                        minFontSize: 16.0,
-                      ),
-                      applicationIcon: Image.asset(
-                        R.icon_location,
-                        width: IconTheme.of(context).size,
-                        height: IconTheme.of(context).size,
-                      ),
-                      applicationVersion: packageInfo.version,
-                      applicationName: packageInfo.appName,
-                      applicationLegalese: " \xA9 by p2kr ",
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-            ListTile(
-              leading: FaIcon(FontAwesomeIcons.cog),
-              title: AutoSizeText(
-                'Settings',
-                minFontSize: 16.0,
-              ),
-              onTap: () async {
-                // Update the state of the app.
-                // ...
+              FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var packageInfo = snapshot.data;
+                      return AboutListTile(
+                        icon: FaIcon(FontAwesomeIcons.questionCircle),
+                        child: AutoSizeText(
+                          "About",
+                          minFontSize: 16.0,
+                        ),
+                        applicationIcon: Image.asset(
+                          R.icon_location,
+                          width: IconTheme.of(context).size,
+                          height: IconTheme.of(context).size,
+                        ),
+                        applicationVersion: packageInfo.version,
+                        applicationName: packageInfo.appName,
+                        applicationLegalese: " \xA9 by p2kr ",
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+              ListTile(
+                leading: FaIcon(FontAwesomeIcons.cog),
+                title: AutoSizeText(
+                  'Settings',
+                  minFontSize: 16.0,
+                ),
+                onTap: () async {
+                  // Update the state of the app.
+                  // ...
 
-                await Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => SettingsPage(),
-                  ),
-                );
-              },
-            ),
-          ],
+                  await Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (context) => SettingsPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       appBar: AppBar(

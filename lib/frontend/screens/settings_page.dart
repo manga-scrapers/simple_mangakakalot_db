@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:sample_mangakakalot_db/backend/backup_and_restore/handle_backup.dart';
+import 'package:sample_mangakakalot_db/backend/backup_and_restore/handle_restore.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key key}) : super(key: key);
@@ -18,8 +20,9 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         children: [
           ListTile(
-            onTap: () {
+            onTap: () async {
               //todo: create backup option
+              await HandleBackup(context).initBackup();
             },
             title: AutoSizeText("Backup"),
             leading: Icon(Icons.backup),
@@ -27,6 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             onTap: () {
               //todo: create restores option
+              HandleRestore();
             },
             title: AutoSizeText("Restore"),
             leading: Icon(Icons.restore),
