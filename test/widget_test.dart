@@ -23,7 +23,16 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
+    //load boxes here
+    var favBox = Hive.box<Book>(R.favorite_books);
+
     expect(find.text('Favorites'), findsOneWidget);
+
+    if (favBox.isEmpty) {
+      expect(find.text("Favorited books appear here"), findsOneWidget);
+    } else {
+      expect(find.text("Favorited books appear here"), findsNothing);
+    }
 
     // Tap the 'search' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.search));
