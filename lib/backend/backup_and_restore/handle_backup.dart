@@ -37,8 +37,16 @@ class HandleBackup {
     var storagePermission = await Permission.storage.request();
     if (storagePermission.isGranted) {
       String path = await FilesystemPicker.open(
-          context: context, rootDirectory: Directory("/"));
-      _createBackup(path);
+        title: 'Save to folder',
+        context: context,
+        rootDirectory: await getExternalStorageDirectory(),
+        fsType: FilesystemType.folder,
+        pickText: 'Save file to this folder',
+        folderIconColor: Colors.red,
+      );
+      try {
+        _createBackup(path);
+      } catch (e) {}
     } else {
       //todo: show alert dialog
     }
