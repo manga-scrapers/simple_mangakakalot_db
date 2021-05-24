@@ -58,15 +58,17 @@ class _BookContentPageState extends State<BookContentPage> {
                     .getBook();
               }
               if (!isFavorite) {
-                BookStoringHandler.putWithCare(favBox, _book.bookLink, _book)
-                    .then((value) => print("value put ${_book.bookLink}"));
+                BookStoringHandler.putWithCare(favBox, _book.bookLink, _book);
+                // .then((value) => print("value put ${_book.bookLink}"));
               } else {
-                favBox
-                    .delete(_book.bookLink)
-                    .then((value) => print("del value  ${_book.bookLink}"));
+                favBox.delete(_book.bookLink);
+                // .then((value) => print("del value  ${_book.bookLink}"));
               }
               setState(() {
+                //todo:: is this better
                 isFavorite = favBox.containsKey(_book.bookLink);
+                //or this??
+                // isFavorite = !isFavorite;
               });
             },
             icon: Icon(

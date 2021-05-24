@@ -39,15 +39,19 @@ class BookCard extends StatelessWidget {
             ),
             SizedBox(width: 2.0),
             Expanded(
-              child: HorizontalScrollableText(
-                searchBook.bookName,
-                style: TextStyle(fontWeight: FontWeight.bold),
+              child: Center(
+                child: HorizontalScrollableText(
+                  searchBook.bookName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             SizedBox(width: 2.0),
             Expanded(
-              child: HorizontalScrollableText(
-                searchBook.latestChapter,
+              child: Center(
+                child: HorizontalScrollableText(
+                  searchBook.latestChapter,
+                ),
               ),
             ),
           ],
