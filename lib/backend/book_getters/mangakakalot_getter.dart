@@ -96,6 +96,8 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
       return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
     } on Exception {
       return [];
+    } on Error {
+      return [];
     }
   }
 
@@ -109,6 +111,8 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
           10;
       return rating;
     } on Exception {
+      return -1;
+    } on Error {
       return -1;
     }
   }
