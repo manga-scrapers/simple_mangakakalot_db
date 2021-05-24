@@ -94,6 +94,8 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
       return doc.querySelectorAll("a.a-h").map((e) => e.text.trim()).toList();
     } on Exception {
       return [];
+    } on Error {
+      return [];
     }
   }
 
@@ -106,6 +108,8 @@ class ManganeloGetter implements GenerateBookFromSearchBook {
       var rating = ratingAvg / ratingBest * 10;
       return rating;
     } on Exception {
+      return -1;
+    } on Error {
       return -1;
     }
   }

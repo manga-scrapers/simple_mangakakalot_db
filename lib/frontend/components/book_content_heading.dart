@@ -47,6 +47,14 @@ class _BookContentHeadingState extends State<BookContentHeading> {
     return widgetBook.totalChaptersList.last;
   }
 
+  String assembleGenres() {
+    var genres = widget._book.genres;
+    if (genres.isEmpty) {
+      return "";
+    }
+    return widget._book.genres.reduce((v, e) => v + " " + e);
+  }
+
   @override
   Widget build(BuildContext context) {
     precacheImage(NetworkImage(widget._book.thumbnail), context);
@@ -80,7 +88,7 @@ class _BookContentHeadingState extends State<BookContentHeading> {
               SizedBox(height: 2.0),
               HorizontalScrollableText(
                 //todo: properly convert
-                "Genres: ${widget._book.genres.reduce((v, e) => v + " " + e)}",
+                "Genres: ${assembleGenres()}",
               ),
               SizedBox(height: 2.0),
               HorizontalScrollableText(
