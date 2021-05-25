@@ -5,7 +5,8 @@ import 'package:hive/hive.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
-import 'package:sample_mangakakalot_db/frontend/screens/reading_page.dart';
+import 'package:sample_mangakakalot_db/frontend/screens/page_view_for_reading.dart';
+import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class LastChapterReadButton extends StatefulWidget {
   final ValueListenable<Box<Book>> lastReadChapterListener;
@@ -18,6 +19,8 @@ class LastChapterReadButton extends StatefulWidget {
 }
 
 class _LastChapterReadButtonState extends State<LastChapterReadButton> {
+  Box<Chapter> chaptersBox;
+
   Chapter getLastChapterRead(Box<Book> value) {
     Book widgetBook = widget._book;
     if (value.containsKey(widgetBook.bookLink)) {
@@ -26,6 +29,34 @@ class _LastChapterReadButtonState extends State<LastChapterReadButton> {
       }
     }
     return widgetBook.totalChaptersList.last;
+  }
+
+  int getChapterNumber() {
+    Chapter lastChapter =
+        getLastChapterRead(widget.lastReadChapterListener.value);
+
+    for (int i = 0; i < widget._book.totalChaptersList.length; i++) {
+      var x = widget._book.totalChaptersList[i];
+      if (x.chapterLink == lastChapter.chapterLink) {
+        return i;
+      }
+    }
+
+    return -1; // todo : better handling
+  }
+
+  void callback(Chapter chapter) {
+    setState(() {
+      chaptersBox.put(chapter.chapterLink, chapter);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    chaptersBox = Hive.box(R.chapters_cache);
   }
 
   @override
@@ -42,9 +73,11 @@ class _LastChapterReadButtonState extends State<LastChapterReadButton> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ReadingPage(
-                getLastChapterRead(widget.lastReadChapterListener.value),
+              builder: (context) => PageViewForReading(
+                widget._book,
                 SearchBook.fromBook(widget._book),
+                getChapterNumber(),
+                callback: callback,
               ),
             ),
           );

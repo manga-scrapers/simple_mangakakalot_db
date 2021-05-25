@@ -9,11 +9,11 @@ import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 class PageViewForReading extends StatefulWidget {
   final Book book;
   final SearchBook searchBook;
-  final int initialPage;
+  final int initialChapterNumber;
 
   final Function callback;
 
-  PageViewForReading(this.book, this.searchBook, this.initialPage,
+  PageViewForReading(this.book, this.searchBook, this.initialChapterNumber,
       {this.callback});
 
   @override
@@ -34,15 +34,18 @@ class _PageViewForReadingState extends State<PageViewForReading> {
     chaptersBox = Hive.box<Chapter>(R.chapters_cache);
     favBooksBox = Hive.box<Book>(R.favorite_books);
     booksCacheBox = Hive.box<Book>(R.books_cache);
+
+    currentIndex = widget.initialChapterNumber;
   }
 
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
+      reverse: true,
       itemCount: widget.book.totalChaptersList.length,
       controller: PageController(
         keepPage: true,
-        initialPage: widget.initialPage ?? 0,
+        initialPage: widget.initialChapterNumber ?? 0,
       ),
       itemBuilder: (context, index) {
         currentIndex = index;
