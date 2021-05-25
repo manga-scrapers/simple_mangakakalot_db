@@ -74,6 +74,7 @@ class _ChaptersListViewState extends State<ChaptersListView> {
               // });
 
               //todo : i think it's optional because book_content_page uses books_cache
+
               BookStoringHandler.putWithCare(
                   favBooksBox, widget.book.bookLink, widget.book);
 
