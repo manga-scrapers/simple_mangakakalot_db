@@ -29,7 +29,7 @@ class FavPageDrawerMenu extends StatelessWidget {
               if (snapshot.hasData) {
                 var packageInfo = snapshot.data;
                 return AboutListTile(
-                  icon: Icon(FontAwesomeIcons.questionCircle),
+                  icon: Icon(FontAwesomeIcons.infoCircle),
                   child: AutoSizeText(
                     "About",
                     minFontSize: 16.0,

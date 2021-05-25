@@ -6,6 +6,9 @@ class BookStoringHandler {
       Box<Book> box, dynamic key, Book value) async {
     if (box.containsKey(key)) {
       value.lastChapterRead = box.get(key).lastChapterRead;
+      for (int i = 0; i < value.totalChaptersList.length; i++) {
+        value.totalChaptersList[i] = box.get(key).totalChaptersList[i];
+      }
     }
     await box.put(key, value);
   }
