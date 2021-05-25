@@ -36,15 +36,20 @@ class HandleBackup {
   Future<void> initBackup() async {
     var storagePermission = await Permission.storage.request();
     if (storagePermission.isGranted) {
-      String path = await FilesystemPicker.open(
-        title: 'Save to folder',
-        context: context,
-        rootDirectory: await getExternalStorageDirectory(),
-        fsType: FilesystemType.folder,
-        pickText: 'Save file to this folder',
-        folderIconColor: Colors.red,
-      );
       try {
+        var rootDirectory = (await getApplicationDocumentsDirectory());
+
+        String path = await FilesystemPicker.open(
+          title: 'Save to folder',
+          context: context,
+          rootName: rootDirectory.path,
+          rootDirectory: rootDirectory,
+          //await getExternalStorageDirectory(),
+          fsType: FilesystemType.folder,
+          pickText: 'Save file to this folder',
+          folderIconColor: Colors.red,
+        );
+
         _createBackup(path);
       } catch (e) {}
     } else {
