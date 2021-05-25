@@ -19,10 +19,8 @@ class ReadingPage extends StatelessWidget {
     for (var page in _chapter.pages) {
       try {
         precacheImage(NetworkImage(page.pageLink, headers: R.headers), context);
-      } on Exception {
-        // print("Exception in caching: " + e.toString());
-      } on Error {
-        // print("Error in caching: " + e.toString());
+      } catch (e) {
+        print(e.toString());
       }
     }
 
