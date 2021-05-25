@@ -5,7 +5,7 @@ import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/books_cache_handler.dart';
 import 'package:sample_mangakakalot_db/constants.dart';
 import 'package:sample_mangakakalot_db/frontend/components/scrollable_text.dart';
-import 'package:sample_mangakakalot_db/frontend/screens/reading_page.dart';
+import 'package:sample_mangakakalot_db/frontend/screens/page_view_for_reading.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
 class ChaptersListView extends StatefulWidget {
@@ -37,6 +37,12 @@ class _ChaptersListViewState extends State<ChaptersListView> {
     chaptersBox = Hive.box<Chapter>(R.chapters_cache);
     favBooksBox = Hive.box<Book>(R.favorite_books);
     booksCacheBox = Hive.box<Book>(R.books_cache);
+  }
+
+  void callback(Chapter chapter) {
+    setState(() {
+      chaptersBox.put(chapter.chapterLink, chapter);
+    });
   }
 
   ButtonStyle getChapterButtonStyle(Chapter chapter) {
@@ -84,9 +90,11 @@ class _ChaptersListViewState extends State<ChaptersListView> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ReadingPage(
-                    widget.book.totalChaptersList[index],
+                  builder: (context) => PageViewForReading(
+                    widget.book,
                     widget.searchBook,
+                    index,
+                    callback: callback,
                   ),
                 ),
               );

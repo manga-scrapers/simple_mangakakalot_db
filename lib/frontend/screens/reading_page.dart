@@ -21,7 +21,9 @@ class ReadingPage extends StatelessWidget {
       try {
         precacheImage(NetworkImage(page.pageLink, headers: R.headers), context);
       } catch (e) {
-        print(e.toString());
+        // print(e);
+        // print(s);
+        continue;
       }
     }
 
@@ -40,20 +42,6 @@ class ReadingPage extends StatelessWidget {
             softWrap: false,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              //todo:
-            },
-            icon: Icon(FontAwesomeIcons.arrowLeft),
-          ),
-          IconButton(
-            onPressed: () {
-              //todo:
-            },
-            icon: Icon(FontAwesomeIcons.arrowRight),
-          ),
-        ],
       ),
       body: SafeArea(
         child: FutureBuilder<List<PageOfChapter>>(
