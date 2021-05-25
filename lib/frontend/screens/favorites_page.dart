@@ -1,10 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
 import 'package:sample_mangakakalot_db/frontend/components/book_card.dart';
+import 'package:sample_mangakakalot_db/frontend/components/favpage_drawer.dart';
 import 'package:sample_mangakakalot_db/frontend/screens/search_screen.dart';
 import 'package:sample_mangakakalot_db/names_constant.dart' as R;
 
@@ -41,8 +45,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
     //   crossAxisCount = MediaQuery.of(context).size.width.round();
     // }
     return Scaffold(
+      drawer: Container(
+        width: MediaQuery.of(context).size.shortestSide * 1 / 2,
+        child: Drawer(
+          child: FavPageDrawerMenu(),
+        ),
+      ),
       appBar: AppBar(
-        title: Text("Favorites"),
+        title: AutoSizeText("Favorites"),
         actions: [
           IconButton(
             onPressed: () async {
@@ -53,7 +63,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 delegate: CustomSearchDelegate(),
               );
             },
-            icon: Icon(Icons.search),
+            icon: FaIcon(FontAwesomeIcons.search),
           ),
         ],
       ),

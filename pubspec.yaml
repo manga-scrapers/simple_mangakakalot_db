@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.1.0+1
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
@@ -22,7 +22,11 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   auto_size_text: ^2.1.0
-
+  font_awesome_flutter: ^9.0.0
+  package_info: ^2.0.0
+  permission_handler: ^8.0.0+2
+  flutter_archive: ^4.0.1
+  filesystem_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:

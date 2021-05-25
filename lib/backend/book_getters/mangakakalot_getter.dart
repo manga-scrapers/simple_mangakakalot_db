@@ -29,7 +29,7 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
 
     try {
       book.rating = getRating(document);
-    } on Exception {
+    } catch (e) {
       // TODO
       book.rating = 0.0;
     }
@@ -94,7 +94,7 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
       var doc = parse(
           document.querySelectorAll("ul.manga-info-text > li")[6].innerHtml);
       return doc.querySelectorAll("a").map((e) => e.text.trim()).toList();
-    } on Exception {
+    } catch (e) {
       return [];
     }
   }
@@ -108,7 +108,7 @@ class MangakakalotGetter implements GenerateBookFromSearchBook {
           double.parse(match.group(3).trim()) *
           10;
       return rating;
-    } on Exception {
+    } catch (e) {
       return -1;
     }
   }

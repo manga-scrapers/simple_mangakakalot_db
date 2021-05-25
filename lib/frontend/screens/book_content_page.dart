@@ -97,6 +97,10 @@ class _BookContentPageState extends State<BookContentPage> {
             initialData: booksCacheBox.get(widget.searchBook.bookLink),
             future: GenerateBookFromSearchBook(widget.searchBook).getBook(),
             builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                print(snapshot.stackTrace);
+                return Center(child: Icon(Icons.error));
+              }
               if (snapshot.hasData) {
                 _book = snapshot.data;
 
