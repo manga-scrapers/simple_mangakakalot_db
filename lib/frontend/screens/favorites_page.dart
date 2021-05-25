@@ -63,7 +63,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 delegate: CustomSearchDelegate(),
               );
             },
-            icon: FaIcon(FontAwesomeIcons.search),
+            icon: Icon(FontAwesomeIcons.search),
           ),
         ],
       ),
