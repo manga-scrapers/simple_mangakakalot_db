@@ -9,6 +9,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
@@ -35,7 +36,7 @@ void main() {
     }
 
     // Tap the 'search' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.search));
+    await tester.tap(find.byIcon(FontAwesomeIcons.search));
     await tester.pumpAndSettle();
 
     expect(find.text('Search term must be longer than two letters'),

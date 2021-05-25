@@ -29,7 +29,7 @@ class FavPageDrawerMenu extends StatelessWidget {
               if (snapshot.hasData) {
                 var packageInfo = snapshot.data;
                 return AboutListTile(
-                  icon: FaIcon(FontAwesomeIcons.questionCircle),
+                  icon: Icon(FontAwesomeIcons.questionCircle),
                   child: AutoSizeText(
                     "About",
                     minFontSize: 16.0,
@@ -48,7 +48,7 @@ class FavPageDrawerMenu extends StatelessWidget {
               }
             }),
         ListTile(
-          leading: FaIcon(FontAwesomeIcons.cog),
+          leading: Icon(FontAwesomeIcons.cog),
           title: AutoSizeText(
             'Settings',
             minFontSize: 16.0,
