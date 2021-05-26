@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
@@ -20,7 +21,9 @@ class ReadingPage extends StatelessWidget {
       try {
         precacheImage(NetworkImage(page.pageLink, headers: R.headers), context);
       } catch (e) {
-        print(e.toString());
+        // print(e);
+        // print(s);
+        continue;
       }
     }
 
