@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sample_mangakakalot_db/backend/SearchBookModel.dart';
 import 'package:sample_mangakakalot_db/backend/book_getter_with_selector.dart';
 import 'package:sample_mangakakalot_db/backend/book_model.dart';
